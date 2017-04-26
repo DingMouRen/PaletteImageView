@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "1.0.0"
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -30,13 +30,14 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:palette-v7:25.0.0'
+    compile 'com.android.support:palette-v7:25.3.1'
     testCompile 'junit:junit:4.12'
 }
 
 def siteUrl = 'https://github.com/DingMouRen/PaletteImageView'                        // #CONFIG# // project homepage
 def gitUrl = 'https://github.com/DingMouRen/PaletteImageView.git'                     // #CONFIG# // project git
-group = "com.dingmouren"                                                          // #CONFIG# // Maven Group ID for the artifact (pageckage name is ok)
+group = "com.dingmouren.paletteimageview"
+version = "1.0.0"
 
 install {
     repositories.mavenInstaller {
@@ -76,6 +77,7 @@ task sourcesJar(type: Jar) {
 }
 
 task javadoc(type: Javadoc) {
+    options.encoding = "UTF-8"
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
@@ -84,11 +86,26 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
-
+javadoc {
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        version true
+        links "http://docs.oracle.com/javase/7/docs/api"
+        title 'A PaletteImageView For Android'   // 文档标题
+    }
+}
 artifacts {
-    // archives javadocJar
+    archives javadocJar
     archives sourcesJar
-    archives sourcesJar
+}
+// 生成jar包
+task releaseJar(type: Copy) {
+    from( 'build/intermediates/bundles/release')
+    into( '../jar')
+    include('classes.jar')
+    rename('classes.jar', 'okgo-' + version + '.jar')
 }
 
 Properties properties = new Properties()
@@ -100,6 +117,7 @@ bintray {
     pkg {
         repo = "maven"
         name = "paletteimageview"                                                 // #CONFIG# project name in jcenter
+        userOrg = "dingmouren"
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
