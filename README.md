@@ -9,7 +9,7 @@ PaletteImageView可以动态的提取图片的主要颜色，并将颜色作为�
 
 ### build.gradle中引用
 ```
-	compile 'com.dingmouren.paletteimageview:paletteimageview:1.0.0'
+	compile 'com.dingmouren.paletteimageview:paletteimageview:1.0.1'
 ```
 
 ## 使用
