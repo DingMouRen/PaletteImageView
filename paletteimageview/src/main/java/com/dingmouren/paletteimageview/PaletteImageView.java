@@ -61,7 +61,6 @@ public class PaletteImageView extends RelativeLayout {
         mPaintShadow.setColor(Color.WHITE);
         mPaintShadow.setStyle(Paint.Style.FILL);
         setLayerType(LAYER_TYPE_SOFTWARE, null);
-        setPadding(80, 40, 80, 120);
         setBackgroundColor(getResources().getColor(android.R.color.transparent));
         setGravity(Gravity.CENTER);
 
@@ -69,19 +68,29 @@ public class PaletteImageView extends RelativeLayout {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PaletteImageView);
             imgId = a.getResourceId(R.styleable.PaletteImageView_paletteSrc, -1);
             mCornerRadius = a.getDimensionPixelSize(R.styleable.PaletteImageView_cornerRadis, mCornerRadius);
+            a.recycle();
         } else {
             float density = context.getResources().getDisplayMetrics().density;
             mCornerRadius = (int) (mCornerRadius * density);
             imgId = -1;
         }
         mCustomImageView = new CustomImageView(context);
-        mCustomImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        mCustomImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         if (imgId == -1) {
             mCustomImageView.setImageResource(android.R.color.transparent);
         } else {
             mCustomImageView.setImageResource(imgId);
         }
         addView(mCustomImageView);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        if (width > 0 ) {
+            setPadding(width / 10, width / 10, width / 10, width / 10);
+        }
     }
 
     @Override
