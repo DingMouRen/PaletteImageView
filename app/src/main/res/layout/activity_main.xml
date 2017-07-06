@@ -1,47 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context="com.dingmouren.smaple.paletteimageview.MainActivity">
+
     <LinearLayout
-        android:id="@+id/linear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        >
-        <com.dingmouren.paletteimageview.PaletteImageView
-            android:id="@+id/palette1"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            app:paletteSrc="@mipmap/hai" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
 
         <com.dingmouren.paletteimageview.PaletteImageView
-            android:id="@+id/palette2"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            app:paletteSrc="@mipmap/yellow"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            />
+            android:id="@+id/palette"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:palettePadding="20dp"
+            app:paletteSrc="@drawable/img2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="图片半径" />
+
+            <SeekBar
+                android:id="@+id/seek1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="500" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="阴影半径" />
+
+            <SeekBar
+                android:id="@+id/seek2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="x偏移量  " />
+
+            <SeekBar
+                android:id="@+id/seek3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="y偏移量  " />
+
+            <SeekBar
+                android:id="@+id/seek4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
     </LinearLayout>
-    <com.dingmouren.paletteimageview.PaletteImageView
-        android:id="@+id/palette3"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        app:paletteSrc="@mipmap/red"
-        android:layout_below="@+id/linear"
-        android:layout_centerHorizontal="true"
-        />
-    <SeekBar
-        android:id="@+id/seek_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/palette3"
-        android:max="666"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        />
-
-</RelativeLayout>
+</ScrollView>

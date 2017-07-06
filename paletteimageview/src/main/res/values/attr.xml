@@ -2,7 +2,9 @@
 <resources>
 
     <declare-styleable name="PaletteImageView">
-        <attr name="cornerRadis" format="dimension" />
+        <attr name="paletteRadius" format="dimension" />
         <attr name="paletteSrc" format="reference" />
+        <attr name="palettePadding" format="dimension" />
+
     </declare-styleable>
 </resources>

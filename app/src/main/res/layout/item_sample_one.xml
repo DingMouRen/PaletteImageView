@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.dingmouren.paletteimageview.PaletteImageView
+        android:id="@+id/palette"
+        android:layout_width="600dp"
+        android:layout_height="450dp"
+        app:palettePadding="30dp"
+        app:paletteRadius="20dp"
+        />
+</RelativeLayout>
