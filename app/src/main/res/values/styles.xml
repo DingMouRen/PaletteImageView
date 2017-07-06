@@ -11,6 +11,6 @@
         <item name="android:statusBarColor" tools:ignore="NewApi">#000000</item>
     </style>
     <style name="SampleTwoStyle" parent="Theme.AppCompat.Light.NoActionBar">
-
+        <item name="android:statusBarColor" tools:ignore="NewApi">@color/md_teal_A400</item>
     </style>
 </resources>

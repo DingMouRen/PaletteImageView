@@ -29,7 +29,7 @@ import java.lang.ref.WeakReference;
  * Created by dingmouren on 2017/4/25.
  */
 
-public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalLayoutListener{
+public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalLayoutListener {
 
     private static final String TAG = PaletteImageView.class.getName();
     private static final int MSG = 0x101;
@@ -42,7 +42,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     private Bitmap mBitmap;
     private int mImgId;
     private AsyncTask mAsyncTask;
-    private int mMainColor = -1;
+    public int mMainColor = -1;
     private int mOffsetX = DEFAULT_OFFSET;
     private int mOffsetY = DEFAULT_OFFSET;
     private int mShadowRadius = DEFAULT_SHADOW_RADIUS;
@@ -50,8 +50,6 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     private BitmapFactory.Options options;
     private int mWeightWidth, mWeightHeight;
     private RectF mRectFShadow;
-    private Bitmap mBitmapTarget;
-    private Paint mPaintBitmap;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -64,15 +62,6 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     @Override
     protected void onDetachedFromWindow() {
         getViewTreeObserver().removeGlobalOnLayoutListener(this);
-        if (mPaintShadow != null) mPaintShadow = null;
-        if (mBitmap != null){ mBitmap.recycle();mBitmap = null;};
-        if (mAsyncTask != null) mAsyncTask = null;
-        if (mHandler != null) mHandler.removeMessages(MSG);
-        if (options != null) options = null;
-        if (mRectFShadow != null) mRectFShadow = null;
-        if (mBitmapTarget != null){mBitmapTarget.recycle();mBitmapTarget = null;}
-        destroyDrawingCache();
-        System.gc();
         super.onDetachedFromWindow();
     }
 
@@ -123,14 +112,17 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
             }
 
         } else {
+            if (mBitmap != null) {
+                zipBitmapFromBitmap(mBitmap);
+            }
             int rawWidth = mBitmap.getWidth();
             int rawHeight = mBitmap.getHeight();
+            Log.e(TAG,"onMeasure:"+rawWidth+"/"+rawHeight+"--"+width+"/"+height);
             height = (int) ((width - mPadding * 2) * rawHeight * 1.0f / rawWidth) + mPadding * 2;
         }
         setMeasuredDimension(width, height);
 
     }
-
 
 
     @Override
@@ -139,8 +131,9 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
             if (mRectFShadow == null) {
                 WeakReference<RectF> weakRectF = new WeakReference<RectF>(new RectF(mPadding, mPadding, getWidth() - mPadding, getHeight() - mPadding));
                 if (weakRectF.get() == null) return;
-                mRectFShadow = weakRectF.get() ;
+                mRectFShadow = weakRectF.get();
             }
+
             int id1 = canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null, Canvas.ALL_SAVE_FLAG);
             canvas.drawRoundRect(mRectFShadow, mRadius, mRadius, mPaintShadow);
             canvas.restoreToCount(id1);
@@ -151,30 +144,27 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     }
 
     private Bitmap createRoundConerImage(Bitmap source, int radius) {
-        if (mPaintBitmap == null) {
-            WeakReference<Paint> weakPaint = new WeakReference<Paint>(new Paint());
-            if (weakPaint.get() == null) return null;
-            mPaintBitmap = weakPaint.get();
-            mPaintBitmap.setAntiAlias(true);
-            mPaintBitmap.setDither(true);
-        }
-        if (mBitmapTarget == null) {
-            WeakReference<Bitmap> weakBitmap = new WeakReference<Bitmap>(Bitmap.createBitmap(getWidth() - mPadding * 2, getHeight() - mPadding * 2, Bitmap.Config.ARGB_8888));
-            if (weakBitmap.get() == null) return null;
-            mBitmapTarget = weakBitmap.get();
-        }
+        WeakReference<Paint> weakPaint = new WeakReference<Paint>(new Paint());
+        if (weakPaint.get() == null) return null;
+        Paint paint = weakPaint.get();
+        paint.setAntiAlias(true);
+        paint.setDither(true);
+        WeakReference<Bitmap> weakBitmap = new WeakReference<Bitmap>(Bitmap.createBitmap(getWidth() - mPadding * 2, getHeight() - mPadding * 2, Bitmap.Config.ARGB_8888));
+        if (weakBitmap.get() == null) return null;
+        Bitmap target = weakBitmap.get();
 
-        WeakReference<Canvas> weakCanvas = new WeakReference<Canvas>(new Canvas(mBitmapTarget));
+        WeakReference<Canvas> weakCanvas = new WeakReference<Canvas>(new Canvas(target));
         if (weakCanvas.get() == null) return null;
         Canvas canvas = weakCanvas.get();
         WeakReference<RectF> weakRectF = new WeakReference<RectF>(new RectF(0, 0, source.getWidth(), source.getHeight()));
+        Log.e(TAG,"roundRect:"+source.getWidth()+"/"+source.getHeight()+" mRadius:"+radius);
         if (weakRectF.get() == null) return null;
         RectF rect = weakRectF.get();
-        canvas.drawRoundRect(rect, radius, radius, mPaintBitmap);
-        mPaintBitmap.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(source, 0, 0, mPaintBitmap);
-        mPaintBitmap.setXfermode(null);
-        return mBitmapTarget;
+        canvas.drawRoundRect(rect, radius, radius, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(source, 0, 0, paint);
+        paint.setXfermode(null);
+        return target;
     }
 
     @Override
@@ -185,7 +175,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
             zipBitmap(mImgId);
             initShadow(mBitmap);
         } else {
-            zipBitmapFromBitmap(mBitmap);
+//            zipBitmapFromBitmap(mBitmap);
         }
     }
 
@@ -280,6 +270,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         int rawHeight = bitmap.getHeight();
         int reqWidth = mWeightWidth - mPadding - mPadding;
         int reqHeight = mWeightHeight - mPadding - mPadding;
+        if (reqHeight <= 0 || reqWidth <= 0) return;
         WeakReference<Matrix> weakMatrix = new WeakReference<Matrix>(new Matrix());
         if (weakMatrix.get() == null) return;
         Matrix matrix = weakMatrix.get();
@@ -312,6 +303,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
 
         } else {
             float scale = rawHeight * 1.0f / rawWidth;
+            Log.e(TAG,"ZIP--scale:"+scale+"--"+rawWidth+"/"+rawHeight+"--"+reqWidth+"/"+reqHeight);
             mBitmap = Bitmap.createScaledBitmap(mBitmap, reqWidth, (int) (reqWidth * scale), true);
         }
 
@@ -388,6 +380,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
                 mPalette = palette;
                 mMainColor = palette.getDominantSwatch().getRgb();
                 mHandler.sendEmptyMessage(MSG);
+
             }
         }
     };
@@ -480,6 +473,10 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     public int getLightMutedContentTextColor() {
         if (mPalette == null) return 0;
         return mPalette.getLightMutedSwatch() == null ? 0 : mPalette.getLightMutedSwatch().getBodyTextColor();
+    }
+
+    public  Palette getPalette(){
+        return mPalette;
     }
 
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+
+    <com.dingmouren.paletteimageview.PaletteImageView
+        android:id="@+id/palette"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:palettePadding="10dp"
+        />
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PaletteImageView"
+            android:padding="3dp"
+            />
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Don't aim for success if you want it; just do what you love and believe in, and it will come naturally."
+            />
+    </LinearLayout>
+</LinearLayout>
