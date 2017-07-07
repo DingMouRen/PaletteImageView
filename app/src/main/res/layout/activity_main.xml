@@ -17,10 +17,10 @@
         <com.dingmouren.paletteimageview.PaletteImageView
             android:id="@+id/palette"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:layout_gravity="center_horizontal"
             app:palettePadding="20dp"
-            app:paletteSrc="@drawable/img2" />
+            app:paletteSrc="@mipmap/ic_launcher" />
 
         <LinearLayout
             android:layout_width="match_parent"

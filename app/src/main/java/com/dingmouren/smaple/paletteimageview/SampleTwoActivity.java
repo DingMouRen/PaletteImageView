@@ -74,6 +74,7 @@ public class SampleTwoActivity extends AppCompatActivity {
                     mLinearLayout.setBackgroundColor(mPaletteImageView.mMainColor);
                     title.setTextColor(mPaletteImageView.getLightMutedTitleTextColor());
                     content.setTextColor(mPaletteImageView.getLightMutedContentTextColor());
+                    Log.e("check:",mPaletteImageView.mMainColor+"--"+mPaletteImageView.getLightMutedTitleTextColor()+"--"+mPaletteImageView.getLightMutedContentTextColor());
                 }
             }
         }

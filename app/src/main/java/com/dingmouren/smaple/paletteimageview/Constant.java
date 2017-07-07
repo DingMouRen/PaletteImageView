@@ -6,6 +6,8 @@ package com.dingmouren.smaple.paletteimageview;
 
 public class Constant {
     public static int[] mImgs = new int[]{
+//            R.mipmap.ic_launcher,
+//            R.mipmap.test2
             R.drawable.img1,
             R.drawable.img2,
             R.drawable.img3,

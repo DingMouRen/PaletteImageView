@@ -47,9 +47,11 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     private int mOffsetY = DEFAULT_OFFSET;
     private int mShadowRadius = DEFAULT_SHADOW_RADIUS;
     private Palette mPalette;
-    private BitmapFactory.Options options;
-    private int mWeightWidth, mWeightHeight;
     private RectF mRectFShadow;
+    private Bitmap mRealBitmap;
+    private int mOnMeasureHeightMode = -1;
+
+
 
     private Handler mHandler = new Handler() {
         @Override
@@ -99,35 +101,27 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-
-        if (mBitmap != null && options != null) {
-            int rawWidth = options.outWidth;
-            int rawHeight = options.outHeight;
-
-            if (heightMode == MeasureSpec.UNSPECIFIED) {
-                height = (int) (mWeightWidth * (rawHeight * 1.0f / rawWidth));
-            }
-            if (widthMode == MeasureSpec.EXACTLY) {
-            }
-
-        } else {
+        mOnMeasureHeightMode = MeasureSpec.getMode(heightMeasureSpec);
+        if (mOnMeasureHeightMode == MeasureSpec.UNSPECIFIED) {
             if (mBitmap != null) {
-                zipBitmapFromBitmap(mBitmap);
+                height = (int) ((width -mPadding * 2)  * (mBitmap.getHeight() * 1.0f / mBitmap.getWidth())) + mPadding * 2;
             }
-            int rawWidth = mBitmap.getWidth();
-            int rawHeight = mBitmap.getHeight();
-            Log.e(TAG,"onMeasure:"+rawWidth+"/"+rawHeight+"--"+width+"/"+height);
-            height = (int) ((width - mPadding * 2) * rawHeight * 1.0f / rawWidth) + mPadding * 2;
+            if (mImgId != 0 && mRealBitmap != null){
+                height = mRealBitmap.getHeight() + mPadding * 2;
+            }
         }
         setMeasuredDimension(width, height);
-
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+            zipBitmap(mImgId,mBitmap,mOnMeasureHeightMode);
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (mBitmap != null) {
+        if (mRealBitmap != null) {
             if (mRectFShadow == null) {
                 WeakReference<RectF> weakRectF = new WeakReference<RectF>(new RectF(mPadding, mPadding, getWidth() - mPadding, getHeight() - mPadding));
                 if (weakRectF.get() == null) return;
@@ -137,10 +131,14 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
             int id1 = canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null, Canvas.ALL_SAVE_FLAG);
             canvas.drawRoundRect(mRectFShadow, mRadius, mRadius, mPaintShadow);
             canvas.restoreToCount(id1);
-            canvas.drawBitmap(createRoundConerImage(mBitmap, mRadius), mPadding, mPadding, null);
+            canvas.drawBitmap(createRoundConerImage(mRealBitmap, mRadius), mPadding, mPadding, null);
             if (mMainColor != -1) mAsyncTask.cancel(true);
         }
 
+    }
+
+    @Override
+    public void onGlobalLayout() {
     }
 
     private Bitmap createRoundConerImage(Bitmap source, int radius) {
@@ -157,7 +155,6 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         if (weakCanvas.get() == null) return null;
         Canvas canvas = weakCanvas.get();
         WeakReference<RectF> weakRectF = new WeakReference<RectF>(new RectF(0, 0, source.getWidth(), source.getHeight()));
-        Log.e(TAG,"roundRect:"+source.getWidth()+"/"+source.getHeight()+" mRadius:"+radius);
         if (weakRectF.get() == null) return null;
         RectF rect = weakRectF.get();
         canvas.drawRoundRect(rect, radius, radius, paint);
@@ -167,17 +164,6 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         return target;
     }
 
-    @Override
-    public void onGlobalLayout() {
-        mWeightWidth = getWidth();
-        mWeightHeight = getHeight();
-        if (mImgId != 0) {
-            zipBitmap(mImgId);
-            initShadow(mBitmap);
-        } else {
-//            zipBitmapFromBitmap(mBitmap);
-        }
-    }
 
     @Override
     protected void onAttachedToWindow() {
@@ -193,119 +179,59 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
      */
     public void setBitmap(Bitmap bitmap) {
         this.mBitmap = bitmap;
-        initShadow(mBitmap);
     }
 
     /**
      * 初始化阴影颜色
      */
     private void initShadow(Bitmap bitmap) {
-        if (mBitmap != null) {
+        if (bitmap != null) {
             mAsyncTask = Palette.from(bitmap).generate(paletteAsyncListener);
         }
     }
 
 
-    /**
-     * 压缩bitmap
-     */
-    private void zipBitmap(int imgId) {
-        options = new BitmapFactory.Options();
-        BitmapFactory.decodeResource(getResources(), imgId, options);
 
-        int rawWidth = options.outWidth;
-        int rawHeight = options.outHeight;
-        int reqWidth = mWeightWidth - mPadding - mPadding;
-        int reqHeight = mWeightHeight - mPadding - mPadding;
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
-        options.inJustDecodeBounds = true;
-        options.inSampleSize = calculateInSampleSize(rawWidth, rawHeight, reqWidth, reqHeight);
-        options.inJustDecodeBounds = false;
-        WeakReference<Matrix> weakMatrix = new WeakReference<Matrix>(new Matrix());
-        if (weakMatrix.get() == null) return;
-        Matrix matrix = weakMatrix.get();
-        if (reqHeight == reqWidth) {
-            if (rawWidth == rawHeight) {
-                int least = Math.min(rawHeight, reqHeight);
-                int big = Math.max(rawHeight, reqHeight);
-                float scale = 0;
-                if (rawHeight > reqHeight) {
-                    scale = least * 1.0f / big;
-                } else {
-                    scale = big * 1.0f / least;
-                }
-                matrix.setScale(scale, scale);
-                mBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(getResources(), imgId, options),
-                        0, 0, rawWidth, rawWidth, matrix, true);
-            } else if (rawHeight > reqHeight || rawWidth > reqWidth) {
-                int dx = 0;
-                int dy = 0;
-                int small = Math.min(rawHeight, rawWidth);
-                int least = Math.min(small, reqHeight);
-                float scale = reqHeight * 1.0f / small;
-                matrix.setScale(scale, scale);
-                if (rawHeight > rawWidth) {
-                    dy = (rawHeight - reqHeight) / 2;
-                } else {
-                    dx = (rawWidth - reqWidth) / 2;
-                }
-                mBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(getResources(), imgId, options),
-                        dx, dy, least, least, matrix, true);
-            }
-
-        } else if (rawHeight < reqHeight && rawWidth < reqWidth && rawHeight < rawWidth) {
-            float scale = rawHeight * 1.0f / rawWidth;
-            mBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), imgId, options),
-                    reqWidth, (int) (reqWidth * scale), true);
-        } else {
-            float scale = rawHeight * 1.0f / rawWidth;
-            mBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), imgId, options),
-                    reqWidth, (int) (reqWidth * scale) + mPadding * 2, true);
+    private void zipBitmap(int imgId,Bitmap bitmap,int heightNode) {
+        int rawWidth = 0;
+        int rawHeight = 0;
+        if (imgId !=0 && bitmap == null){
+            WeakReference<BitmapFactory.Options> weakOptions = new WeakReference<BitmapFactory.Options>(new BitmapFactory.Options());
+            if (weakOptions.get() == null) return;
+            BitmapFactory.Options options = weakOptions.get();
+            options = new BitmapFactory.Options();
+            BitmapFactory.decodeResource(getResources(), imgId, options);
+            rawWidth = options.outWidth;
+            rawHeight = options.outHeight;
+            bitmap = BitmapFactory.decodeResource(getResources(),mImgId);
+        }else if (imgId == 0 && bitmap != null){
+            rawWidth = bitmap.getWidth();
+            rawHeight = bitmap.getHeight();
         }
-
-    }
-
-    private void zipBitmapFromBitmap(Bitmap bitmap) {
-        int rawWidth = bitmap.getWidth();
-        int rawHeight = bitmap.getHeight();
-        int reqWidth = mWeightWidth - mPadding - mPadding;
-        int reqHeight = mWeightHeight - mPadding - mPadding;
+        int reqWidth = getWidth() - mPadding - mPadding;
+        int reqHeight = getHeight() - mPadding - mPadding;
         if (reqHeight <= 0 || reqWidth <= 0) return;
         WeakReference<Matrix> weakMatrix = new WeakReference<Matrix>(new Matrix());
         if (weakMatrix.get() == null) return;
         Matrix matrix = weakMatrix.get();
-        if (reqHeight == reqWidth) {
-            if (rawWidth == rawHeight) {
-                int least = Math.min(rawHeight, reqHeight);
-                int big = Math.max(rawHeight, reqHeight);
-                float scale = 0;
-                if (rawHeight > reqHeight) {
-                    scale = least * 1.0f / big;
-                } else {
-                    scale = big * 1.0f / least;
-                }
-                matrix.setScale(scale, scale);
-                mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, rawWidth, rawWidth, matrix, true);
-            } else if (rawHeight > reqHeight || rawWidth > reqWidth) {
-                int dx = 0;
-                int dy = 0;
-                int small = Math.min(rawHeight, rawWidth);
-                int least = Math.min(small, reqHeight);
-                float scale = reqHeight * 1.0f / small;
-                matrix.setScale(scale, scale);
-                if (rawHeight > rawWidth) {
-                    dy = (rawHeight - reqHeight) / 2;
-                } else {
-                    dx = (rawWidth - reqWidth) / 2;
-                }
-                mBitmap = Bitmap.createBitmap(mBitmap, dx, dy, least, least, matrix, true);
-            }
-
-        } else {
+        if (heightNode == 0) {
             float scale = rawHeight * 1.0f / rawWidth;
-            Log.e(TAG,"ZIP--scale:"+scale+"--"+rawWidth+"/"+rawHeight+"--"+reqWidth+"/"+reqHeight);
-            mBitmap = Bitmap.createScaledBitmap(mBitmap, reqWidth, (int) (reqWidth * scale), true);
+            mRealBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, (int) (reqWidth * scale), true);
+        }else {
+            int dx = 0;
+            int dy = 0;
+            int small = Math.min(rawHeight, rawWidth);
+            int big = Math.max(reqWidth, reqHeight);
+            float scale = big * 1.0f / small;
+            matrix.setScale(scale,scale);
+            if (rawHeight > rawWidth) {
+                dy = (rawHeight - rawWidth) / 2 ;
+            } else if (rawHeight < rawWidth) {
+                dx = (rawWidth - rawHeight) / 2 ;
+            }
+            mRealBitmap = Bitmap.createBitmap(bitmap,dx , dy, small, small, matrix, true);
         }
+        initShadow(bitmap);
 
     }
 
@@ -475,7 +401,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         return mPalette.getLightMutedSwatch() == null ? 0 : mPalette.getLightMutedSwatch().getBodyTextColor();
     }
 
-    public  Palette getPalette(){
+    public Palette getPalette() {
         return mPalette;
     }
 

@@ -5,13 +5,14 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:padding="5dp"
     >
 
     <com.dingmouren.paletteimageview.PaletteImageView
         android:id="@+id/palette"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:palettePadding="10dp"
+        app:palettePadding="0dp"
         />
     <LinearLayout
         android:id="@+id/linear"
@@ -19,6 +20,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp"
+        android:visibility="visible"
         >
         <TextView
             android:id="@+id/tv1"
