@@ -1,7 +1,12 @@
 package com.dingmouren.smaple.paletteimageview;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.SeekBar;
 
 import com.dingmouren.paletteimageview.PaletteImageView;
@@ -9,6 +14,7 @@ import com.dingmouren.paletteimageview.PaletteImageView;
 public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
     private PaletteImageView paletteImageView;
     private SeekBar mSeek1,mSeek2,mSeek3,mSeek4;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         mSeek2 = (SeekBar) findViewById(R.id.seek2);
         mSeek3 = (SeekBar) findViewById(R.id.seek3);
         mSeek4 = (SeekBar) findViewById(R.id.seek4);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("PaletteImageView");
     }
 
     private void initListener() {
@@ -61,5 +70,25 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
                 paletteImageView.setPaletteShadowOffset(0,progress);
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.one:
+                startActivity(new Intent(MainActivity.this,SampleOneActivity.class));
+                break;
+            case R.id.two:
+                startActivity(new Intent(MainActivity.this,SampleTwoActivity.class));
+                break;
+
+        }
+        return true;
     }
 }

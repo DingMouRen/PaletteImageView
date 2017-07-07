@@ -50,6 +50,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     private RectF mRectFShadow;
     private Bitmap mRealBitmap;
     private int mOnMeasureHeightMode = -1;
+    public PaletteImageView mInstance;
 
 
 
@@ -82,6 +83,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
 
 
     private void init(Context context, AttributeSet attrs) {
+        this.mInstance = this;
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PaletteImageView);
         mRadius = a.getDimensionPixelSize(R.styleable.PaletteImageView_paletteRadius, 0);
         mImgId = a.getResourceId(R.styleable.PaletteImageView_paletteSrc, 0);
@@ -110,6 +112,9 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
                 height = mRealBitmap.getHeight() + mPadding * 2;
             }
         }
+        if (mBitmap != null) {
+            height = (int) ((width -mPadding * 2)  * (mBitmap.getHeight() * 1.0f / mBitmap.getWidth())) + mPadding * 2;
+        }
         setMeasuredDimension(width, height);
     }
 
@@ -127,7 +132,6 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
                 if (weakRectF.get() == null) return;
                 mRectFShadow = weakRectF.get();
             }
-
             int id1 = canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null, Canvas.ALL_SAVE_FLAG);
             canvas.drawRoundRect(mRectFShadow, mRadius, mRadius, mPaintShadow);
             canvas.restoreToCount(id1);
@@ -154,7 +158,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         WeakReference<Canvas> weakCanvas = new WeakReference<Canvas>(new Canvas(target));
         if (weakCanvas.get() == null) return null;
         Canvas canvas = weakCanvas.get();
-        WeakReference<RectF> weakRectF = new WeakReference<RectF>(new RectF(0, 0, source.getWidth(), source.getHeight()));
+        WeakReference<RectF> weakRectF = new WeakReference<RectF>(new RectF(0, 0, getWidth() - mPadding * 2, getHeight() - mPadding * 2));
         if (weakRectF.get() == null) return null;
         RectF rect = weakRectF.get();
         canvas.drawRoundRect(rect, radius, radius, paint);
@@ -214,6 +218,12 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         WeakReference<Matrix> weakMatrix = new WeakReference<Matrix>(new Matrix());
         if (weakMatrix.get() == null) return;
         Matrix matrix = weakMatrix.get();
+        if (mBitmap != null){
+            float scale = rawHeight * 1.0f / rawWidth;
+            mRealBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, (int) (reqWidth * scale), true);
+            initShadow(mRealBitmap);
+            return;
+        }
         if (heightNode == 0) {
             float scale = rawHeight * 1.0f / rawWidth;
             mRealBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, (int) (reqWidth * scale), true);
@@ -231,7 +241,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
             }
             mRealBitmap = Bitmap.createBitmap(bitmap,dx , dy, small, small, matrix, true);
         }
-        initShadow(bitmap);
+        initShadow(mRealBitmap);
 
     }
 
@@ -306,103 +316,78 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
                 mPalette = palette;
                 mMainColor = palette.getDominantSwatch().getRgb();
                 mHandler.sendEmptyMessage(MSG);
-
+                if (mListener != null) mListener.onComplete(mInstance);
+            }else {
+                if (mListener != null) mListener.onFail();
             }
         }
     };
 
-    public int getVibrantColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getVibrantSwatch() == null ? 0 : mPalette.getVibrantSwatch().getRgb();
+    private OnParseColorListener mListener;
+
+    public void setOnParseColorListener(OnParseColorListener listener){
+        this.mListener = listener;
     }
 
-    public int getVibrantTitleTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getVibrantSwatch() == null ? 0 : mPalette.getVibrantSwatch().getTitleTextColor();
+    public interface OnParseColorListener{
+        void onComplete(PaletteImageView paletteImageView);
+        void onFail();
     }
 
-    public int getVibrantContentTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getVibrantSwatch() == null ? 0 : mPalette.getVibrantSwatch().getBodyTextColor();
+    public int[] getVibrantColor() {
+        if (mPalette == null || mPalette.getVibrantSwatch() == null) return null;
+        int[] arry = new int[3];
+        arry[0] = mPalette.getVibrantSwatch().getTitleTextColor();
+        arry[1] = mPalette.getVibrantSwatch().getBodyTextColor();
+        arry[2] = mPalette.getVibrantSwatch().getRgb();
+        return arry;
     }
 
-    public int getDarkVibrantColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getDarkVibrantSwatch() == null ? 0 : mPalette.getDarkVibrantSwatch().getRgb();
+
+    public int[] getDarkVibrantColor() {
+        if (mPalette == null || mPalette.getDarkVibrantSwatch() == null) return null;
+        int[] arry = new int[3];
+        arry[0] = mPalette.getDarkVibrantSwatch().getTitleTextColor();
+        arry[1] = mPalette.getDarkVibrantSwatch().getBodyTextColor();
+        arry[2] = mPalette.getDarkVibrantSwatch().getRgb();
+        return arry;
     }
 
-    public int getDarkVibrantTitleTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getDarkVibrantSwatch() == null ? 0 : mPalette.getDarkVibrantSwatch().getTitleTextColor();
+
+    public int[] getLightVibrantColor() {
+        if (mPalette == null || mPalette.getLightVibrantSwatch() == null) return null;
+        int[] arry = new int[3];
+        arry[0] = mPalette.getLightVibrantSwatch().getTitleTextColor();
+        arry[1] = mPalette.getLightVibrantSwatch().getBodyTextColor();
+        arry[2] = mPalette.getLightVibrantSwatch().getRgb();
+        return arry;
     }
 
-    public int getDarkVibrantContentTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getDarkVibrantSwatch() == null ? 0 : mPalette.getDarkVibrantSwatch().getBodyTextColor();
+    public int[] getMutedColor() {
+        if (mPalette == null || mPalette.getMutedSwatch() == null) return null;
+        int[] arry = new int[3];
+        arry[0] = mPalette.getMutedSwatch().getTitleTextColor();
+        arry[1] = mPalette.getMutedSwatch().getBodyTextColor();
+        arry[2] = mPalette.getMutedSwatch().getRgb();
+        return arry;
     }
 
-    public int getLightVibrantColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getLightVibrantSwatch() == null ? 0 : mPalette.getLightVibrantSwatch().getRgb();
+    public int[] getDarkMutedColor() {
+        if (mPalette == null || mPalette.getDarkMutedSwatch() == null) return null;
+        int[] arry = new int[3];
+        arry[0] = mPalette.getDarkMutedSwatch().getTitleTextColor();
+        arry[1] = mPalette.getDarkMutedSwatch().getBodyTextColor();
+        arry[2] = mPalette.getDarkMutedSwatch().getRgb();
+        return arry;
     }
 
-    public int getLightVibrantTitleTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getLightVibrantSwatch() == null ? 0 : mPalette.getLightVibrantSwatch().getTitleTextColor();
-    }
 
-    public int getLightVibrantContentTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getLightVibrantSwatch() == null ? 0 : mPalette.getLightVibrantSwatch().getBodyTextColor();
+    public int[] getLightMutedColor() {
+        if (mPalette == null || mPalette.getLightMutedSwatch() == null) return null;
+        int[] arry = new int[3];
+        arry[0] = mPalette.getLightMutedSwatch().getTitleTextColor();
+        arry[1] = mPalette.getLightMutedSwatch().getBodyTextColor();
+        arry[2] = mPalette.getLightMutedSwatch().getRgb();
+        return arry;
     }
-
-    public int getMutedColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getMutedSwatch() == null ? 0 : mPalette.getMutedSwatch().getRgb();
-    }
-
-    public int getMutedTitleTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getMutedSwatch() == null ? 0 : mPalette.getMutedSwatch().getTitleTextColor();
-    }
-
-    public int getMutedContentTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getMutedSwatch() == null ? 0 : mPalette.getMutedSwatch().getBodyTextColor();
-    }
-
-    public int getDarkMutedColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getDarkMutedSwatch() == null ? 0 : mPalette.getDarkMutedSwatch().getRgb();
-    }
-
-    public int getDarkMutedTitleTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getDarkMutedSwatch() == null ? 0 : mPalette.getDarkMutedSwatch().getTitleTextColor();
-    }
-
-    public int getDarkMutedContentTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getDarkMutedSwatch() == null ? 0 : mPalette.getDarkMutedSwatch().getBodyTextColor();
-    }
-
-    public int getLightMutedColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getLightMutedSwatch() == null ? 0 : mPalette.getLightMutedSwatch().getRgb();
-    }
-
-    public int getLightMutedTitleTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getLightMutedSwatch() == null ? 0 : mPalette.getLightMutedSwatch().getTitleTextColor();
-    }
-
-    public int getLightMutedContentTextColor() {
-        if (mPalette == null) return 0;
-        return mPalette.getLightMutedSwatch() == null ? 0 : mPalette.getLightMutedSwatch().getBodyTextColor();
-    }
-
-    public Palette getPalette() {
-        return mPalette;
-    }
-
 }

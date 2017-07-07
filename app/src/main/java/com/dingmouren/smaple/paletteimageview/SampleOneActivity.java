@@ -1,7 +1,9 @@
 package com.dingmouren.smaple.paletteimageview;
 
 import android.content.Context;
+import android.content.pm.ProviderInfo;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArraySet;
@@ -9,10 +11,15 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.dingmouren.paletteimageview.PaletteImageView;
 
@@ -27,55 +34,50 @@ import java.util.Set;
 
 public class SampleOneActivity extends AppCompatActivity {
     private ViewPager mViewPager;
-    private MyAdapter mAdapter;
+    private SampleOneAdapter mAdapter;
+    private RelativeLayout mActionBar;
+    private Window window;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_one);
+        window = SampleOneActivity.this.getWindow();
         initView();
         initData();
     }
 
     private void initView() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mActionBar = (RelativeLayout) findViewById(R.id.action_bar);
     }
 
     private void initData(){
-        mAdapter = new MyAdapter(this);
+        mAdapter = new SampleOneAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                int color = mAdapter.getList().get(position).paletteImageView.mMainColor;
+                mActionBar.setBackgroundColor(color);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.setStatusBarColor(color);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
-    private class MyAdapter extends PagerAdapter{
-        private List<View> mList = new ArrayList<>();
-        private LayoutInflater mLayoutInflater;
-        public MyAdapter(Context cotext) {
-            mLayoutInflater = LayoutInflater.from(cotext);
-        }
 
-        @Override
-        public int getCount() {
-            return Constant.mImgs.length;
-        }
 
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(mList.get(position));
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            View view = mLayoutInflater.inflate(R.layout.item_sample_one,container,false);
-            PaletteImageView palette = (PaletteImageView) view.findViewById(R.id.palette);
-            palette.setBitmap(BitmapFactory.decodeResource(getResources(),Constant.mImgs[position]));
-            container.addView(view);
-            if (!mList.contains(view))  mList.add(view);
-            return view;
-        }
-    }
 }

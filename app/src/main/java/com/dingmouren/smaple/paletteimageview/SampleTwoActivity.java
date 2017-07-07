@@ -15,6 +15,10 @@ import android.widget.TextView;
 
 import com.dingmouren.paletteimageview.PaletteImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 /**
  * Created by dingmouren on 2017/7/6.
  */
@@ -64,17 +68,49 @@ public class SampleTwoActivity extends AppCompatActivity {
                 mLinearLayout = (LinearLayout)itemView. findViewById(R.id.linear);
                 title = (TextView)itemView. findViewById(R.id.tv1);
                 content = (TextView) itemView.findViewById(R.id.tv2);
+                initListener();
+            }
 
+            private void initListener() {
+                mPaletteImageView.setOnParseColorListener(new PaletteImageView.OnParseColorListener() {
+                    @Override
+                    public void onComplete(PaletteImageView paletteImageView) {
+                        int[] vibrant = paletteImageView.getVibrantColor();
+                        int[] vibrantDark = paletteImageView.getDarkVibrantColor();
+                        int[] vibrantLight = paletteImageView.getLightVibrantColor();
+                        int[] muted = paletteImageView.getMutedColor();
+                        int[] mutedDark = paletteImageView.getDarkMutedColor();
+                        int[] mutedLight = paletteImageView.getLightMutedColor();
+                        List<int[]> list = new ArrayList<int[]>();
+                        list.clear();
+                        list.add(vibrant);
+                        list.add(vibrantDark);
+                        list.add(vibrantLight);
+                        list.add(muted);
+                        list.add(mutedDark);
+                        list.add(mutedLight);
+                        for (int i = 0; i <list.size() ; i++) {
+                            int[] arry = list.get(i);
+                            if (arry == null) list.remove(arry);
+                        }
+                        int[] arry = list.get(new Random().nextInt(list.size()-1));
+
+                        title.setTextColor(arry[1]);
+                        content.setTextColor(arry[0]);
+                        mLinearLayout.setBackgroundColor(arry[2]);
+                    }
+
+                    @Override
+                    public void onFail() {
+
+                    }
+                });
             }
 
             public void bindData(int imgId){
                 if (mPaletteImageView.getTag() == null || (int)mPaletteImageView.getTag() == imgId) {
                     mPaletteImageView.setTag(imgId);
                     mPaletteImageView.setBitmap(BitmapFactory.decodeResource(getResources(), imgId));
-                    mLinearLayout.setBackgroundColor(mPaletteImageView.mMainColor);
-                    title.setTextColor(mPaletteImageView.getLightMutedTitleTextColor());
-                    content.setTextColor(mPaletteImageView.getLightMutedContentTextColor());
-                    Log.e("check:",mPaletteImageView.mMainColor+"--"+mPaletteImageView.getLightMutedTitleTextColor()+"--"+mPaletteImageView.getLightMutedContentTextColor());
                 }
             }
         }

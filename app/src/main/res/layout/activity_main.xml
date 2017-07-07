@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:orientation="vertical"
     tools:context="com.dingmouren.smaple.paletteimageview.MainActivity">
-
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/md_teal_A400"
+        app:titleTextColor="@android:color/white"
+        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,11 +25,11 @@
 
         <com.dingmouren.paletteimageview.PaletteImageView
             android:id="@+id/palette"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             app:palettePadding="20dp"
-            app:paletteSrc="@mipmap/ic_launcher" />
+            app:paletteSrc="@mipmap/meigui" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -94,4 +103,5 @@
                 android:max="100" />
         </LinearLayout>
     </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

@@ -19,7 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp"
         android:visibility="visible"
         >
         <TextView
@@ -27,13 +26,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="PaletteImageView"
-            android:padding="3dp"
+           android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
             />
         <TextView
             android:id="@+id/tv2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Don't aim for success if you want it; just do what you love and believe in, and it will come naturally."
+            android:padding="5dp"
             />
     </LinearLayout>
 </LinearLayout>

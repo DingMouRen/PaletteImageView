@@ -11,7 +11,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.2"
     }
     buildTypes {
         release {
@@ -37,7 +37,7 @@ dependencies {
 def siteUrl = 'https://github.com/DingMouRen/PaletteImageView'                        // #CONFIG# // project homepage
 def gitUrl = 'https://github.com/DingMouRen/PaletteImageView.git'                     // #CONFIG# // project git
 group = "com.dingmouren.paletteimageview"
-version = "1.0.1"
+version = "1.0.2"
 
 install {
     repositories.mavenInstaller {

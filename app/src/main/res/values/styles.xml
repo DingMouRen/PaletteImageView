@@ -1,14 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/md_teal_A400</item>
+        <item name="colorPrimaryDark">@color/md_teal_A400</item>
+        <item name="colorAccent">@color/md_teal_A400</item>
     </style>
     <style name="SampleOneStyle" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:statusBarColor" tools:ignore="NewApi">#000000</item>
+        <item name="android:statusBarColor" tools:ignore="NewApi">@color/md_teal_A400</item>
     </style>
     <style name="SampleTwoStyle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:statusBarColor" tools:ignore="NewApi">@color/md_teal_A400</item>
