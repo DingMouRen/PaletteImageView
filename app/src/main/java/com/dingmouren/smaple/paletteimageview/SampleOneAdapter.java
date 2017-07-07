@@ -18,8 +18,6 @@ import java.util.Set;
  */
 
 public class SampleOneAdapter extends FragmentStatePagerAdapter {
-    private Set<SampleOneFragment> mSet = new LinkedHashSet<>();
-    private  List<SampleOneFragment> mList = new ArrayList<>();
     public SampleOneAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -27,16 +25,7 @@ public class SampleOneAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         SampleOneFragment fragment = SampleOneFragment.newInstance(Constant.mHeros[position]);
-        mSet.add(fragment);
         return fragment;
-    }
-    public List<SampleOneFragment> getList(){
-        mList.clear();
-        Iterator iterator = mSet.iterator();
-        while (iterator.hasNext()){
-            mList.add((SampleOneFragment) iterator.next());
-        }
-        return  mList;
     }
     @Override
     public int getCount() {

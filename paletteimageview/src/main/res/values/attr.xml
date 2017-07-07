@@ -5,6 +5,9 @@
         <attr name="paletteRadius" format="dimension" />
         <attr name="paletteSrc" format="reference" />
         <attr name="palettePadding" format="dimension" />
+        <attr name="paletteOffsetX" format="dimension" />
+        <attr name="paletteOffsetY" format="dimension" />
+        <attr name="paletteShadowRadius" format="dimension" />
 
     </declare-styleable>
 </resources>

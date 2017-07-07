@@ -35,48 +35,21 @@ import java.util.Set;
 public class SampleOneActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private SampleOneAdapter mAdapter;
-    private RelativeLayout mActionBar;
-    private Window window;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_one);
-        window = SampleOneActivity.this.getWindow();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(getResources().getColor(R.color.md_teal_A400));
-        }
         initView();
         initData();
     }
 
     private void initView() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        mActionBar = (RelativeLayout) findViewById(R.id.action_bar);
     }
 
     private void initData(){
         mAdapter = new SampleOneAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                int color = mAdapter.getList().get(position).paletteImageView.mMainColor;
-                mActionBar.setBackgroundColor(color);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    window.setStatusBarColor(color);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
     }
 
