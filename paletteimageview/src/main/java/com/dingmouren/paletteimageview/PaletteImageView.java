@@ -29,6 +29,7 @@ import java.lang.ref.WeakReference;
 
 /**
  * Created by dingmouren on 2017/4/25.
+ *
  */
 
 public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalLayoutListener {
@@ -58,6 +59,9 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            if (mOffsetX < DEFAULT_OFFSET) mOffsetX = DEFAULT_OFFSET;
+            if (mOffsetY < DEFAULT_OFFSET) mOffsetY = DEFAULT_OFFSET;
+            if (mShadowRadius < DEFAULT_SHADOW_RADIUS) mShadowRadius = DEFAULT_SHADOW_RADIUS;
             mPaintShadow.setShadowLayer(mShadowRadius, mOffsetX, mOffsetY, mMainColor);
             invalidate();
         }
@@ -89,6 +93,9 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         mRadius = a.getDimensionPixelSize(R.styleable.PaletteImageView_paletteRadius, 0);
         mImgId = a.getResourceId(R.styleable.PaletteImageView_paletteSrc, 0);
         mPadding = a.getDimensionPixelSize(R.styleable.PaletteImageView_palettePadding, DEFAULT_PADDING);
+        mOffsetX = a.getDimensionPixelSize(R.styleable.PaletteImageView_paletteOffsetX,DEFAULT_OFFSET);
+        mOffsetY = a.getDimensionPixelSize(R.styleable.PaletteImageView_paletteOffsetY,DEFAULT_OFFSET);
+        mShadowRadius = a.getDimensionPixelSize(R.styleable.PaletteImageView_paletteShadowRadius,DEFAULT_SHADOW_RADIUS);
         a.recycle();
 
         setPadding(mPadding, mPadding, mPadding, mPadding);
@@ -115,7 +122,6 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         }
         if (mBitmap != null) {
             height = (int) ((width - mPadding * 2) * (mBitmap.getHeight() * 1.0f / mBitmap.getWidth())) + mPadding * 2;
-            Log.e(TAG, "bitmap宽高:" + mBitmap.getWidth() + "/" + mBitmap.getHeight() + "--" + (mBitmap.getRowBytes() * mBitmap.getHeight() / 1024 / 1024));
         }
         setMeasuredDimension(width, height);
     }
@@ -123,7 +129,6 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mBitmap = ratio(mBitmap);
         zipBitmap(mImgId, mBitmap, mOnMeasureHeightMode);
     }
 
@@ -199,7 +204,6 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
 
 
     private void zipBitmap(int imgId, Bitmap bitmap, int heightNode) {
-        Log.e(TAG, "zip:" + bitmap.getWidth() + "/" + bitmap.getHeight());
         WeakReference<Matrix> weakMatrix = new WeakReference<Matrix>(new Matrix());
         if (weakMatrix.get() == null) return;
         Matrix matrix = weakMatrix.get();
@@ -244,34 +248,8 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
             }
             mRealBitmap = Bitmap.createBitmap(bitmap, dx, dy, small, small, matrix, true);
         }
-        if (mRealBitmap != null)
-            Log.e(TAG, "mRealBitap:" + mRealBitmap.getWidth() + "/" + mRealBitmap.getHeight() + "--"/*(mBitmap.getRowBytes()* mRealBitmap.getHeight() /1024/1024)*/);
         initShadow(mRealBitmap);
 
-    }
-
-    public Bitmap ratio(Bitmap image) {
-        Bitmap bitmap = null;
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, os);
-        if (os.toByteArray().length / 1024 > 1024) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
-            os.reset();//重置baos即清空baos
-            image.compress(Bitmap.CompressFormat.JPEG, 50, os);//这里压缩50%，把压缩后的数据存放到baos中
-        }
-        ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
-        BitmapFactory.Options newOpts = new BitmapFactory.Options();
-        //开始读入图片，此时把options.inJustDecodeBounds 设回true了
-        newOpts.inJustDecodeBounds = true;
-        newOpts.inPreferredConfig = Bitmap.Config.RGB_565;
-        bitmap = BitmapFactory.decodeStream(is, null, newOpts);
-        newOpts.inJustDecodeBounds = false;
-        int w = newOpts.outWidth;
-        int h = newOpts.outHeight;
-        newOpts.inSampleSize = calculateInSampleSize(w, h, getWidth() - mPadding * 2, getHeight() - mPadding * 2);//设置缩放比例
-        //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
-        is = new ByteArrayInputStream(os.toByteArray());
-        bitmap = BitmapFactory.decodeStream(is, null, newOpts);
-        return bitmap;
     }
 
     /**
@@ -285,7 +263,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
             int halfHeight = rawHeight / 2;
             int halfWidth = rawWidth / 2;
             while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 12;
+                inSampleSize *= 2;
             }
         }
         return inSampleSize;
