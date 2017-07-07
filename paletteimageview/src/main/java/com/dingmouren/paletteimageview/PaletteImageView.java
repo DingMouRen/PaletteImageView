@@ -23,6 +23,8 @@ import android.view.ViewTreeObserver;
 import android.support.v7.widget.AppCompatImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 
 /**
@@ -51,7 +53,6 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     private Bitmap mRealBitmap;
     private int mOnMeasureHeightMode = -1;
     public PaletteImageView mInstance;
-
 
 
     private Handler mHandler = new Handler() {
@@ -106,14 +107,15 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         mOnMeasureHeightMode = MeasureSpec.getMode(heightMeasureSpec);
         if (mOnMeasureHeightMode == MeasureSpec.UNSPECIFIED) {
             if (mBitmap != null) {
-                height = (int) ((width -mPadding * 2)  * (mBitmap.getHeight() * 1.0f / mBitmap.getWidth())) + mPadding * 2;
+                height = (int) ((width - mPadding * 2) * (mBitmap.getHeight() * 1.0f / mBitmap.getWidth())) + mPadding * 2;
             }
-            if (mImgId != 0 && mRealBitmap != null){
+            if (mImgId != 0 && mRealBitmap != null) {
                 height = mRealBitmap.getHeight() + mPadding * 2;
             }
         }
         if (mBitmap != null) {
-            height = (int) ((width -mPadding * 2)  * (mBitmap.getHeight() * 1.0f / mBitmap.getWidth())) + mPadding * 2;
+            height = (int) ((width - mPadding * 2) * (mBitmap.getHeight() * 1.0f / mBitmap.getWidth())) + mPadding * 2;
+            Log.e(TAG, "bitmap宽高:" + mBitmap.getWidth() + "/" + mBitmap.getHeight() + "--" + (mBitmap.getRowBytes() * mBitmap.getHeight() / 1024 / 1024));
         }
         setMeasuredDimension(width, height);
     }
@@ -121,7 +123,8 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-            zipBitmap(mImgId,mBitmap,mOnMeasureHeightMode);
+        mBitmap = ratio(mBitmap);
+        zipBitmap(mImgId, mBitmap, mOnMeasureHeightMode);
     }
 
     @Override
@@ -151,7 +154,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         Paint paint = weakPaint.get();
         paint.setAntiAlias(true);
         paint.setDither(true);
-        WeakReference<Bitmap> weakBitmap = new WeakReference<Bitmap>(Bitmap.createBitmap(getWidth() - mPadding * 2, getHeight() - mPadding * 2, Bitmap.Config.ARGB_8888));
+        WeakReference<Bitmap> weakBitmap = new WeakReference<Bitmap>(Bitmap.createBitmap(getWidth() - mPadding * 2, getHeight() - mPadding * 2, Bitmap.Config.ARGB_4444));
         if (weakBitmap.get() == null) return null;
         Bitmap target = weakBitmap.get();
 
@@ -195,30 +198,30 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     }
 
 
-
-    private void zipBitmap(int imgId,Bitmap bitmap,int heightNode) {
-        int rawWidth = 0;
-        int rawHeight = 0;
-        if (imgId !=0 && bitmap == null){
-            WeakReference<BitmapFactory.Options> weakOptions = new WeakReference<BitmapFactory.Options>(new BitmapFactory.Options());
-            if (weakOptions.get() == null) return;
-            BitmapFactory.Options options = weakOptions.get();
-            options = new BitmapFactory.Options();
-            BitmapFactory.decodeResource(getResources(), imgId, options);
-            rawWidth = options.outWidth;
-            rawHeight = options.outHeight;
-            bitmap = BitmapFactory.decodeResource(getResources(),mImgId);
-        }else if (imgId == 0 && bitmap != null){
-            rawWidth = bitmap.getWidth();
-            rawHeight = bitmap.getHeight();
-        }
-        int reqWidth = getWidth() - mPadding - mPadding;
-        int reqHeight = getHeight() - mPadding - mPadding;
-        if (reqHeight <= 0 || reqWidth <= 0) return;
+    private void zipBitmap(int imgId, Bitmap bitmap, int heightNode) {
+        Log.e(TAG, "zip:" + bitmap.getWidth() + "/" + bitmap.getHeight());
         WeakReference<Matrix> weakMatrix = new WeakReference<Matrix>(new Matrix());
         if (weakMatrix.get() == null) return;
         Matrix matrix = weakMatrix.get();
-        if (mBitmap != null){
+        int reqWidth = getWidth() - mPadding - mPadding;
+        int reqHeight = getHeight() - mPadding - mPadding;
+        if (reqHeight <= 0 || reqWidth <= 0) return;
+        int rawWidth = 0;
+        int rawHeight = 0;
+        if (imgId != 0 && bitmap == null) {
+            WeakReference<BitmapFactory.Options> weakOptions = new WeakReference<BitmapFactory.Options>(new BitmapFactory.Options());
+            if (weakOptions.get() == null) return;
+            BitmapFactory.Options options = weakOptions.get();
+            BitmapFactory.decodeResource(getResources(), imgId, options);
+            options.inJustDecodeBounds = true;
+            rawWidth = options.outWidth;
+            rawHeight = options.outHeight;
+            options.inSampleSize = calculateInSampleSize(rawWidth, rawHeight, getWidth() - mPadding * 2, getHeight() - mPadding * 2);
+            options.inJustDecodeBounds = false;
+            bitmap = BitmapFactory.decodeResource(getResources(), mImgId, options);
+        } else if (imgId == 0 && bitmap != null) {
+            rawWidth = bitmap.getWidth();
+            rawHeight = bitmap.getHeight();
             float scale = rawHeight * 1.0f / rawWidth;
             mRealBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, (int) (reqWidth * scale), true);
             initShadow(mRealBitmap);
@@ -227,22 +230,48 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         if (heightNode == 0) {
             float scale = rawHeight * 1.0f / rawWidth;
             mRealBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, (int) (reqWidth * scale), true);
-        }else {
+        } else {
             int dx = 0;
             int dy = 0;
             int small = Math.min(rawHeight, rawWidth);
             int big = Math.max(reqWidth, reqHeight);
             float scale = big * 1.0f / small;
-            matrix.setScale(scale,scale);
+            matrix.setScale(scale, scale);
             if (rawHeight > rawWidth) {
-                dy = (rawHeight - rawWidth) / 2 ;
+                dy = (rawHeight - rawWidth) / 2;
             } else if (rawHeight < rawWidth) {
-                dx = (rawWidth - rawHeight) / 2 ;
+                dx = (rawWidth - rawHeight) / 2;
             }
-            mRealBitmap = Bitmap.createBitmap(bitmap,dx , dy, small, small, matrix, true);
+            mRealBitmap = Bitmap.createBitmap(bitmap, dx, dy, small, small, matrix, true);
         }
+        if (mRealBitmap != null)
+            Log.e(TAG, "mRealBitap:" + mRealBitmap.getWidth() + "/" + mRealBitmap.getHeight() + "--"/*(mBitmap.getRowBytes()* mRealBitmap.getHeight() /1024/1024)*/);
         initShadow(mRealBitmap);
 
+    }
+
+    public Bitmap ratio(Bitmap image) {
+        Bitmap bitmap = null;
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, os);
+        if (os.toByteArray().length / 1024 > 1024) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
+            os.reset();//重置baos即清空baos
+            image.compress(Bitmap.CompressFormat.JPEG, 50, os);//这里压缩50%，把压缩后的数据存放到baos中
+        }
+        ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
+        BitmapFactory.Options newOpts = new BitmapFactory.Options();
+        //开始读入图片，此时把options.inJustDecodeBounds 设回true了
+        newOpts.inJustDecodeBounds = true;
+        newOpts.inPreferredConfig = Bitmap.Config.RGB_565;
+        bitmap = BitmapFactory.decodeStream(is, null, newOpts);
+        newOpts.inJustDecodeBounds = false;
+        int w = newOpts.outWidth;
+        int h = newOpts.outHeight;
+        newOpts.inSampleSize = calculateInSampleSize(w, h, getWidth() - mPadding * 2, getHeight() - mPadding * 2);//设置缩放比例
+        //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+        is = new ByteArrayInputStream(os.toByteArray());
+        bitmap = BitmapFactory.decodeStream(is, null, newOpts);
+        return bitmap;
     }
 
     /**
@@ -251,18 +280,13 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
      * @return
      */
     private int calculateInSampleSize(int rawWidth, int rawHeight, int reqWidth, int reqHeight) {
-        int inSampleSize = 0;
-        try {
-            inSampleSize = 1;
-            if (rawHeight > reqHeight || rawWidth > reqWidth) {
-                int halfHeight = rawHeight / 2;
-                int halfWidth = rawWidth / 2;
-                while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
-                    inSampleSize *= 2;
-                }
+        int inSampleSize = 1;
+        if (rawHeight > reqHeight || rawWidth > reqWidth) {
+            int halfHeight = rawHeight / 2;
+            int halfWidth = rawWidth / 2;
+            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 12;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return inSampleSize;
     }
@@ -317,7 +341,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
                 mMainColor = palette.getDominantSwatch().getRgb();
                 mHandler.sendEmptyMessage(MSG);
                 if (mListener != null) mListener.onComplete(mInstance);
-            }else {
+            } else {
                 if (mListener != null) mListener.onFail();
             }
         }
@@ -325,12 +349,13 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
 
     private OnParseColorListener mListener;
 
-    public void setOnParseColorListener(OnParseColorListener listener){
+    public void setOnParseColorListener(OnParseColorListener listener) {
         this.mListener = listener;
     }
 
-    public interface OnParseColorListener{
+    public interface OnParseColorListener {
         void onComplete(PaletteImageView paletteImageView);
+
         void onFail();
     }
 

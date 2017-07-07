@@ -42,6 +42,9 @@ public class SampleOneActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_one);
         window = SampleOneActivity.this.getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(getResources().getColor(R.color.md_teal_A400));
+        }
         initView();
         initData();
     }
@@ -64,7 +67,6 @@ public class SampleOneActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 int color = mAdapter.getList().get(position).paletteImageView.mMainColor;
                 mActionBar.setBackgroundColor(color);
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.setStatusBarColor(color);
                 }

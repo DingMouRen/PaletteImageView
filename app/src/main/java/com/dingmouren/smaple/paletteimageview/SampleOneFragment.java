@@ -40,7 +40,7 @@ public class SampleOneFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null){
             int imgId = getArguments().getInt(IMG_ID);
-            paletteImageView.setBitmap(zipBitmap(imgId));
+            paletteImageView.setBitmap(BitmapFactory.decodeResource(getResources(),imgId));
         }
     }
 

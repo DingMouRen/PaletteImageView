@@ -7,9 +7,10 @@
     >
     <com.dingmouren.paletteimageview.PaletteImageView
         android:id="@+id/palette"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         app:palettePadding="20dp"
         app:paletteRadius="10dp"
+        android:layout_gravity="center_horizontal"
         />
 </LinearLayout>
