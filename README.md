@@ -35,6 +35,22 @@
          app:paletteOffsetX="15dp"
          app:paletteOffsetY="15dp"
          />
+ mPaletteImageView.setOnParseColorListener(new PaletteImageView.OnParseColorListener() {
+                     @Override//解析图片的颜色完毕
+                     public void onComplete(PaletteImageView paletteImageView) {
+                         int[] vibrant = paletteImageView.getVibrantColor();
+                         int[] vibrantDark = paletteImageView.getDarkVibrantColor();
+                         int[] vibrantLight = paletteImageView.getLightVibrantColor();
+                         int[] muted = paletteImageView.getMutedColor();
+                         int[] mutedDark = paletteImageView.getDarkMutedColor();
+                         int[] mutedLight = paletteImageView.getLightMutedColor();
+                     }
+ 
+                     @Override//解析图片的颜色失败
+                     public void onFail() {
+ 
+                     }
+                 });        
 ```
 ### xml属性
 
