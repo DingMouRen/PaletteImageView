@@ -24,19 +24,28 @@
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p2.png)
 ##### 3.图片颜色主题解析
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p3.png)
-## 使用
+### 使用
 
 ```
  <com.dingmouren.paletteimageview.PaletteImageView
-            android:id="@+id/palette2"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            app:cornerRadis="50dp"
-            app:paletteSrc="@mipmap/yellow"          
-            />
+         android:id="@+id/palette"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         app:palettePadding="20dp"
+         app:paletteOffsetX="15dp"
+         app:paletteOffsetY="15dp"
+         />
 ```
+### xml属性
 
-欢迎大家提Issues.
+xml属性 | 描述
+---|---
+  app:palettePadding | 表示阴影显示最大空间距离。值为0,没有阴影，大于0，才有阴影。
+  app:paletteOffsetX | 表示阴影在x方向上的偏移量
+  app:paletteOffsetY | 表示阴影在y方向上的偏移量
+  app:paletteSrc | 表示图片资源
+  app:paletteRadius | 表示圆角半径
+  app:paletteShadowRadius | 表示阴影半径
 
 ## License
 ```
