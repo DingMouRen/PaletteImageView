@@ -25,11 +25,14 @@
 
         <com.dingmouren.paletteimageview.PaletteImageView
             android:id="@+id/palette"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
             android:layout_gravity="center_horizontal"
-            app:palettePadding="30dp"
-            app:paletteSrc="@mipmap/test1" />
+            app:palettePadding="40dp"
+            app:paletteSrc="@mipmap/test4"
+            app:paletteOffsetX="13dp"
+            app:paletteOffsetY="13dp"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -1,16 +1,21 @@
-# PaletteImageView
+### 简介
+* 可以解析图片中的主色调，默认将主色调作为控件阴影的颜色
+* 可以自定义设置控件的阴影颜色
+* 可以控制控件四个角的圆角大小（如果控件设置成正方向，随着圆角半径增大，可以将控件变成圆形）
+* 可以控制控件的阴影半径大小
+* 可以分别控制阴影在x方向和y方向上的偏移量
+* 可以将图片中的颜色解析出六种主题的颜色，每一种主题颜色都有相应的三种匹配背景 标题 正文的推荐颜色
 
-
-PaletteImageView可以动态的提取图片的主要颜色，并将颜色作为图片阴影的控件。Enjoy it  O(∩_∩)O<br><br>
-
-
-
-![image](https://github.com/DingMouRen/PaletteImageView/raw/master/imgs/img.gif)<br><br>
 
 ### build.gradle中引用
 ```
-	compile 'com.dingmouren.paletteimageview:paletteimageview:1.0.1'
+	compile 'com.dingmouren.paletteimageview:paletteimageview:1.0.4'
 ```
+
+
+![image](https://github.com/DingMouRen/WallPager/raw/master/screenshot/demo1.gif)
+![image](https://github.com/DingMouRen/WallPager/raw/master/screenshot/demo2.gif)
+![image](https://github.com/DingMouRen/WallPager/raw/master/screenshot/demo3.gif)
 
 ## 使用
 

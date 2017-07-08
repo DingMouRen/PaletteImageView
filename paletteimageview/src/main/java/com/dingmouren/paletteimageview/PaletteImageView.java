@@ -184,6 +184,11 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     }
 
 
+    public void setShadowColor(int color){
+        this.mMainColor = color;
+        mHandler.sendEmptyMessage(MSG);
+    }
+
     /**
      * 设置位图
      *

@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
     private void initView() {
         paletteImageView = (PaletteImageView) findViewById(R.id.palette);
+        paletteImageView.setShadowColor(getResources().getColor(R.color.accent_brown));
         mSeek1 = (SeekBar) findViewById(R.id.seek1);
         mSeek2 = (SeekBar) findViewById(R.id.seek2);
         mSeek3 = (SeekBar) findViewById(R.id.seek3);
