@@ -12,16 +12,14 @@
         android:id="@+id/palette"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:palettePadding="20dp"
-        app:paletteOffsetX="15dp"
-        app:paletteOffsetY="15dp"
+        app:palettePadding="0dp"
         />
     <LinearLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         >
         <TextView
             android:id="@+id/tv1"

@@ -68,7 +68,7 @@ public class SampleTwoActivity extends AppCompatActivity {
                 mLinearLayout = (LinearLayout)itemView. findViewById(R.id.linear);
                 title = (TextView)itemView. findViewById(R.id.tv1);
                 content = (TextView) itemView.findViewById(R.id.tv2);
-//                initListener();
+                initListener();
             }
 
             private void initListener() {
@@ -94,10 +94,11 @@ public class SampleTwoActivity extends AppCompatActivity {
                             if (arry == null) list.remove(arry);
                         }
                         int[] arry = list.get(new Random().nextInt(list.size()-1));
-
-                        title.setTextColor(arry[1]);
-                        content.setTextColor(arry[0]);
-                        mLinearLayout.setBackgroundColor(arry[2]);
+                        if(arry != null) {
+                            title.setTextColor(arry[1]);
+                            content.setTextColor(arry[0]);
+                            mLinearLayout.setBackgroundColor(arry[2]);
+                        }
                     }
 
                     @Override

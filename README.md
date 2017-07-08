@@ -14,9 +14,9 @@
 ```
 
 ##### 1.参数的控制
-![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo1.gif)　　　
-![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo2.gif)　　　
-![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo3.gif)
+圆角半径|阴影半径|阴影偏移量
+---|---|---
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo1.gif) | ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo2.gif) | ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo3.gif)
 
 ##### 2.阴影颜色默认是图片的主色调
 
