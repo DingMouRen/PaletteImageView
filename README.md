@@ -12,11 +12,14 @@
 	compile 'com.dingmouren.paletteimageview:paletteimageview:1.0.4'
 ```
 
-
+##### 参数的控制
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo1.gif)　　　
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo2.gif)　　　
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo3.gif)
 
+##### 阴影颜色默认是图片的主色调
+
+　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo4.gif)
 ## 使用
 
 ```
