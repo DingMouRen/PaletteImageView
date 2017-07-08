@@ -13,9 +13,9 @@
 ```
 
 
-![image](https://github.com/DingMouRen/WallPager/raw/master/screenshot/demo1.gif)
-![image](https://github.com/DingMouRen/WallPager/raw/master/screenshot/demo2.gif)
-![image](https://github.com/DingMouRen/WallPager/raw/master/screenshot/demo3.gif)
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo1.gif)
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo2.gif)
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo3.gif)
 
 ## 使用
 
