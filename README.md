@@ -1,3 +1,4 @@
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p1.png)　<br><br>
 ### 简介
 * 可以解析图片中的主色调，默认将主色调作为控件阴影的颜色
 * 可以自定义设置控件的阴影颜色
@@ -20,6 +21,9 @@
 ##### 阴影颜色默认是图片的主色调
 
 　　　　　　　　　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo4.gif)
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p2.png)
+##### 图片颜色主题解析
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p3.png)
 ## 使用
 
 ```

@@ -68,7 +68,7 @@ public class SampleTwoActivity extends AppCompatActivity {
                 mLinearLayout = (LinearLayout)itemView. findViewById(R.id.linear);
                 title = (TextView)itemView. findViewById(R.id.tv1);
                 content = (TextView) itemView.findViewById(R.id.tv2);
-                initListener();
+//                initListener();
             }
 
             private void initListener() {
