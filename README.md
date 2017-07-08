@@ -46,7 +46,21 @@ xml属性 | 描述
   app:paletteSrc | 表示图片资源
   app:paletteRadius | 表示圆角半径
   app:paletteShadowRadius | 表示阴影半径
-
+### 公共的方法
+方法 | 描述
+---|---
+public void setShadowColor(int color) | 表示自定义设置控件阴影的颜色
+ public void setBitmap(Bitmap bitmap) | 表示设置控件位图
+ public void setPaletteRadius(int raius) | 表示设置控件圆角半径
+ public void setPaletteShadowOffset(int offsetX, int offsetY) | 表示设置阴影在控件阴影在x方向 或 y方向上的偏移量
+ public void setPaletteShadowRadius(int radius) | 表示设置控件阴影半径
+ public void setOnParseColorListener(OnParseColorListener listener) | 设置控件解析图片颜色的监听器
+ public int[] getVibrantColor() | 表示获取Vibrant主题的颜色数组；假设颜色数组为arry,arry[0]是推荐标题使用的颜色，arry[1]是推荐正文使用的颜色，arry[2]是推荐背景使用的颜色。颜色只是用于推荐，可以自行选择
+ public int[] getDarkVibrantColor()| 表示获取DarkVibrant主题的颜色数组，数组元素含义同上
+ public int[] getLightVibrantColor()| 表示获取LightVibrant主题的颜色数组，数组元素含义同上
+ public int[] getMutedColor()| 表示获取Muted主题的颜色数组，数组元素含义同上
+ public int[] getDarkMutedColor()| 表示获取DarkMuted主题的颜色数组，数组元素含义同上
+ public int[] getLightMutedColor()| 表示获取LightMuted主题的颜色数组，数组元素含义同上
 ## License
 ```
 Copyright (C) 2017 WeyYe
