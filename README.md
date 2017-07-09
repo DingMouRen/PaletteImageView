@@ -12,7 +12,7 @@
 ```
 	compile 'com.dingmouren.paletteimageview:paletteimageview:1.0.4'
 ```
-　　　　　　　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/title.gif) 
+　　　　　　　　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/title.gif) 
 ##### 1.参数的控制
 圆角半径|阴影半径|阴影偏移量
 ---|---|---
