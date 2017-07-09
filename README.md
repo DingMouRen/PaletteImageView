@@ -20,7 +20,7 @@
 
 ##### 2.阴影颜色默认是图片的主色调
 
-　　　　　　　　　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo4.gif)
+　　　　　　　　　　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo4.gif)
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p2.png)
 ##### 3.图片颜色主题解析
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p3.png)
