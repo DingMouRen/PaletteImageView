@@ -32,7 +32,7 @@ import java.lang.ref.WeakReference;
  *
  */
 
-public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalLayoutListener {
+public class PaletteImageView extends View {
 
     private static final String TAG = PaletteImageView.class.getName();
     private static final int MSG = 0x101;
@@ -40,6 +40,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     private static final int DEFAULT_OFFSET = 20;
     private static final int DEFAULT_SHADOW_RADIUS = 20;
     private Paint mPaintShadow;
+    private Paint mPaint;
     private int mRadius;
     private int mPadding;
     private Bitmap mBitmap;
@@ -54,6 +55,10 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     private Bitmap mRealBitmap;
     private int mOnMeasureHeightMode = -1;
     public PaletteImageView mInstance;
+    private Bitmap mRoundBitmap;
+    private RectF mRoundRectF;
+    private PorterDuffXfermode mPorterDuffXfermode;
+
 
 
     private Handler mHandler = new Handler() {
@@ -69,7 +74,6 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
 
     @Override
     protected void onDetachedFromWindow() {
-        getViewTreeObserver().removeGlobalOnLayoutListener(this);
         super.onDetachedFromWindow();
     }
 
@@ -104,6 +108,9 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
         mPaintShadow.setDither(true);
         setLayerType(LAYER_TYPE_SOFTWARE, null);
         setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        mPaint  = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setDither(true);
+        mPorterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
     }
 
     @Override
@@ -130,56 +137,35 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         zipBitmap(mImgId, mBitmap, mOnMeasureHeightMode);
+        mRectFShadow = new RectF(mPadding, mPadding, getWidth() - mPadding, getHeight() - mPadding);
+        mRoundRectF = new RectF(0, 0, getWidth() - mPadding * 2, getHeight() - mPadding * 2);
+        mRoundBitmap = createRoundConerImage(mRealBitmap,mRadius);
+
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (mRealBitmap != null) {
-            if (mRectFShadow == null) {
-                WeakReference<RectF> weakRectF = new WeakReference<RectF>(new RectF(mPadding, mPadding, getWidth() - mPadding, getHeight() - mPadding));
-                if (weakRectF.get() == null) return;
-                mRectFShadow = weakRectF.get();
-            }
-            int id1 = canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null, Canvas.ALL_SAVE_FLAG);
             canvas.drawRoundRect(mRectFShadow, mRadius, mRadius, mPaintShadow);
-            canvas.restoreToCount(id1);
-            canvas.drawBitmap(createRoundConerImage(mRealBitmap, mRadius), mPadding, mPadding, null);
+            canvas.drawBitmap(mRoundBitmap, mPadding, mPadding, null);
             if (mMainColor != -1) mAsyncTask.cancel(true);
         }
 
     }
 
-    @Override
-    public void onGlobalLayout() {
-    }
-
     private Bitmap createRoundConerImage(Bitmap source, int radius) {
-        WeakReference<Paint> weakPaint = new WeakReference<Paint>(new Paint());
-        if (weakPaint.get() == null) return null;
-        Paint paint = weakPaint.get();
-        paint.setAntiAlias(true);
-        paint.setDither(true);
-        WeakReference<Bitmap> weakBitmap = new WeakReference<Bitmap>(Bitmap.createBitmap(getWidth() - mPadding * 2, getHeight() - mPadding * 2, Bitmap.Config.ARGB_4444));
-        if (weakBitmap.get() == null) return null;
-        Bitmap target = weakBitmap.get();
-
-        WeakReference<Canvas> weakCanvas = new WeakReference<Canvas>(new Canvas(target));
-        if (weakCanvas.get() == null) return null;
-        Canvas canvas = weakCanvas.get();
-        WeakReference<RectF> weakRectF = new WeakReference<RectF>(new RectF(0, 0, getWidth() - mPadding * 2, getHeight() - mPadding * 2));
-        if (weakRectF.get() == null) return null;
-        RectF rect = weakRectF.get();
-        canvas.drawRoundRect(rect, radius, radius, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(source, 0, 0, paint);
-        paint.setXfermode(null);
+        Bitmap target = Bitmap.createBitmap(getWidth() - mPadding * 2, getHeight() - mPadding * 2, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(target);
+        canvas.drawRoundRect(mRoundRectF, radius, radius, mPaint);
+        mPaint.setXfermode(mPorterDuffXfermode);
+        canvas.drawBitmap(source, 0, 0, mPaint);
+        mPaint.setXfermode(null);
         return target;
     }
 
 
     @Override
     protected void onAttachedToWindow() {
-        getViewTreeObserver().addOnGlobalLayoutListener(this);
         super.onAttachedToWindow();
     }
 
@@ -281,6 +267,7 @@ public class PaletteImageView extends View implements ViewTreeObserver.OnGlobalL
      */
     public void setPaletteRadius(int raius) {
         this.mRadius = raius;
+        mRoundBitmap = createRoundConerImage(mRealBitmap,mRadius);
         invalidate();
     }
 

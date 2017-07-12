@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.dingmouren.paletteimageview.PaletteImageView;
 
@@ -20,6 +21,8 @@ import com.dingmouren.paletteimageview.PaletteImageView;
 public class SampleOneFragment extends Fragment {
     private static final String IMG_ID = "img_id";
     public PaletteImageView paletteImageView;
+    private LinearLayout mContainer;
+
 
     public static SampleOneFragment newInstance(int imgId){
         SampleOneFragment fragment = new SampleOneFragment();
@@ -32,6 +35,7 @@ public class SampleOneFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.item_sample_one,container,false);
+        mContainer  = (LinearLayout) view.findViewById(R.id.container);
         paletteImageView = (PaletteImageView) view.findViewById(R.id.palette);
         return view;
     }
@@ -45,17 +49,9 @@ public class SampleOneFragment extends Fragment {
         }
     }
 
-    private Bitmap zipBitmap(int imgId){
-        Bitmap bitmap = null;
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        BitmapFactory.decodeResource(getResources(),imgId,options);
-//        options.inJustDecodeBounds = true;
-//        options.inSampleSize = 8;
-//        options.inJustDecodeBounds = false;
-//        bitmap = BitmapFactory.decodeResource(getResources(),imgId,options);
-        Matrix matrix = new Matrix();
-//        matrix.setScale(2.0f,2.0f);
-        bitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(getResources(),imgId),0,0,324,594,matrix,true);
-        return bitmap;
+    @Override
+    public void onPause() {
+        mContainer.removeAllViews();
+        super.onPause();
     }
 }

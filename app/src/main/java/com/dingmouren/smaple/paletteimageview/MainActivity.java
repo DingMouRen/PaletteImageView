@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import com.dingmouren.paletteimageview.PaletteImageView;
@@ -14,6 +15,7 @@ import com.dingmouren.paletteimageview.PaletteImageView;
 public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
     private PaletteImageView paletteImageView;
     private SeekBar mSeek1,mSeek2,mSeek3,mSeek4;
+    private LinearLayout activity_main;
     private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         mSeek3 = (SeekBar) findViewById(R.id.seek3);
         mSeek4 = (SeekBar) findViewById(R.id.seek4);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        activity_main = (LinearLayout) findViewById(R.id.activity_main);
         setSupportActionBar(toolbar);
         toolbar.setTitle("PaletteImageView");
     }
@@ -91,5 +94,11 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
         }
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+//        activity_main.removeAllViews();
+        super.onPause();
     }
 }
