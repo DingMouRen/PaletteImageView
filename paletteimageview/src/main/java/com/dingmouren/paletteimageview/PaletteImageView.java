@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapRegionDecoder;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
@@ -17,14 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.support.v7.widget.AppCompatImageView;
-import android.widget.Toast;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 
 /**
@@ -58,6 +49,7 @@ public class PaletteImageView extends View {
     private Bitmap mRoundBitmap;
     private RectF mRoundRectF;
     private PorterDuffXfermode mPorterDuffXfermode;
+    private OnParseColorListener mListener;
 
 
 
@@ -71,11 +63,6 @@ public class PaletteImageView extends View {
             invalidate();
         }
     };
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-    }
 
     public PaletteImageView(Context context) {
         this(context, null);
@@ -150,7 +137,51 @@ public class PaletteImageView extends View {
             canvas.drawBitmap(mRoundBitmap, mPadding, mPadding, null);
             if (mMainColor != -1) mAsyncTask.cancel(true);
         }
+    }
 
+    public void setShadowColor(int color){
+        this.mMainColor = color;
+        mHandler.sendEmptyMessage(MSG);
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.mBitmap = bitmap;
+    }
+
+    public void setPaletteRadius(int raius) {
+        this.mRadius = raius;
+        mRoundBitmap = createRoundConerImage(mRealBitmap,mRadius);
+        invalidate();
+    }
+
+    public void setPaletteShadowOffset(int offsetX, int offsetY) {
+        if (offsetX >= mPadding) {
+            this.mOffsetX = mPadding;
+        } else {
+            this.mOffsetX = offsetX;
+        }
+        if (offsetY > mPadding) {
+            this.mOffsetX = mPadding;
+        } else {
+            this.mOffsetY = offsetY;
+        }
+
+        mHandler.sendEmptyMessage(MSG);
+    }
+
+    public void setPaletteShadowRadius(int radius) {
+        this.mShadowRadius = radius;
+        mHandler.sendEmptyMessage(MSG);
+    }
+
+    public void setOnParseColorListener(OnParseColorListener listener) {
+        this.mListener = listener;
+    }
+
+    private void initShadow(Bitmap bitmap) {
+        if (bitmap != null) {
+            mAsyncTask = Palette.from(bitmap).generate(paletteAsyncListener);
+        }
     }
 
     private Bitmap createRoundConerImage(Bitmap source, int radius) {
@@ -162,37 +193,6 @@ public class PaletteImageView extends View {
         mPaint.setXfermode(null);
         return target;
     }
-
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-    }
-
-
-    public void setShadowColor(int color){
-        this.mMainColor = color;
-        mHandler.sendEmptyMessage(MSG);
-    }
-
-    /**
-     * 设置位图
-     *
-     * @param bitmap
-     */
-    public void setBitmap(Bitmap bitmap) {
-        this.mBitmap = bitmap;
-    }
-
-    /**
-     * 初始化阴影颜色
-     */
-    private void initShadow(Bitmap bitmap) {
-        if (bitmap != null) {
-            mAsyncTask = Palette.from(bitmap).generate(paletteAsyncListener);
-        }
-    }
-
 
     private void zipBitmap(int imgId, Bitmap bitmap, int heightNode) {
         WeakReference<Matrix> weakMatrix = new WeakReference<Matrix>(new Matrix());
@@ -243,11 +243,6 @@ public class PaletteImageView extends View {
 
     }
 
-    /**
-     * 计算inSampleSize
-     *
-     * @return
-     */
     private int calculateInSampleSize(int rawWidth, int rawHeight, int reqWidth, int reqHeight) {
         int inSampleSize = 1;
         if (rawHeight > reqHeight || rawWidth > reqWidth) {
@@ -259,49 +254,6 @@ public class PaletteImageView extends View {
         }
         return inSampleSize;
     }
-
-    /**
-     * 设置半径
-     *
-     * @param raius
-     */
-    public void setPaletteRadius(int raius) {
-        this.mRadius = raius;
-        mRoundBitmap = createRoundConerImage(mRealBitmap,mRadius);
-        invalidate();
-    }
-
-    /**
-     * 设置在x y方向上阴影的偏移量
-     *
-     * @param offsetX
-     * @param offsetY
-     */
-    public void setPaletteShadowOffset(int offsetX, int offsetY) {
-        if (offsetX >= mPadding) {
-            this.mOffsetX = mPadding;
-        } else {
-            this.mOffsetX = offsetX;
-        }
-        if (offsetY > mPadding) {
-            this.mOffsetX = mPadding;
-        } else {
-            this.mOffsetY = offsetY;
-        }
-
-        mHandler.sendEmptyMessage(MSG);
-    }
-
-    /**
-     * 设置阴影的半径
-     *
-     * @param radius
-     */
-    public void setPaletteShadowRadius(int radius) {
-        this.mShadowRadius = radius;
-        mHandler.sendEmptyMessage(MSG);
-    }
-
 
     private Palette.PaletteAsyncListener paletteAsyncListener = new Palette.PaletteAsyncListener() {
         @Override
@@ -317,18 +269,6 @@ public class PaletteImageView extends View {
         }
     };
 
-    private OnParseColorListener mListener;
-
-    public void setOnParseColorListener(OnParseColorListener listener) {
-        this.mListener = listener;
-    }
-
-    public interface OnParseColorListener {
-        void onComplete(PaletteImageView paletteImageView);
-
-        void onFail();
-    }
-
     public int[] getVibrantColor() {
         if (mPalette == null || mPalette.getVibrantSwatch() == null) return null;
         int[] arry = new int[3];
@@ -338,7 +278,6 @@ public class PaletteImageView extends View {
         return arry;
     }
 
-
     public int[] getDarkVibrantColor() {
         if (mPalette == null || mPalette.getDarkVibrantSwatch() == null) return null;
         int[] arry = new int[3];
@@ -347,7 +286,6 @@ public class PaletteImageView extends View {
         arry[2] = mPalette.getDarkVibrantSwatch().getRgb();
         return arry;
     }
-
 
     public int[] getLightVibrantColor() {
         if (mPalette == null || mPalette.getLightVibrantSwatch() == null) return null;
@@ -376,7 +314,6 @@ public class PaletteImageView extends View {
         return arry;
     }
 
-
     public int[] getLightMutedColor() {
         if (mPalette == null || mPalette.getLightMutedSwatch() == null) return null;
         int[] arry = new int[3];
@@ -384,5 +321,10 @@ public class PaletteImageView extends View {
         arry[1] = mPalette.getLightMutedSwatch().getBodyTextColor();
         arry[2] = mPalette.getLightMutedSwatch().getRgb();
         return arry;
+    }
+
+    public interface OnParseColorListener {
+        void onComplete(PaletteImageView paletteImageView);
+        void onFail();
     }
 }
