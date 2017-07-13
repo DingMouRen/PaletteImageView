@@ -77,6 +77,8 @@ public void setShadowColor(int color) | 表示自定义设置控件阴影的颜�
  public int[] getMutedColor()| 表示获取Muted主题的颜色数组，数组元素含义同上
  public int[] getDarkMutedColor()| 表示获取DarkMuted主题的颜色数组，数组元素含义同上
  public int[] getLightMutedColor()| 表示获取LightMuted主题的颜色数组，数组元素含义同上
+
+##### 十分感谢[pqpo](https://github.com/pqpo)对于内存优化的建议
 ## License
 ```
 Copyright (C) 2017 WeyYe
