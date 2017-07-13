@@ -2,6 +2,7 @@ package com.dingmouren.smaple.paletteimageview;
 
 /**
  * Created by dingmouren on 2017/7/6.
+ * email:naildingmouren@gmail.com
  */
 
 public class Constant {

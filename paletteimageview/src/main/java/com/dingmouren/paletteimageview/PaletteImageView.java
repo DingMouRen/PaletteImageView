@@ -20,6 +20,7 @@ import java.lang.ref.WeakReference;
 
 /**
  * Created by dingmouren on 2017/4/25.
+ * email:naildingmouren@gmail.com
  *
  */
 

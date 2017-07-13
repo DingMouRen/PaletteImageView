@@ -16,6 +16,7 @@ import com.dingmouren.paletteimageview.PaletteImageView;
 
 /**
  * Created by dingmouren on 2017/7/7.
+ * email:naildingmouren@gmail.com
  */
 
 public class SampleOneFragment extends Fragment {
