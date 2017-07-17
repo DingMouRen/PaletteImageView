@@ -51,19 +51,7 @@ public class PaletteImageView extends View {
     private RectF mRoundRectF;
     private PorterDuffXfermode mPorterDuffXfermode;
     private OnParseColorListener mListener;
-
-
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (mOffsetX < DEFAULT_OFFSET) mOffsetX = DEFAULT_OFFSET;
-            if (mOffsetY < DEFAULT_OFFSET) mOffsetY = DEFAULT_OFFSET;
-            if (mShadowRadius < DEFAULT_SHADOW_RADIUS) mShadowRadius = DEFAULT_SHADOW_RADIUS;
-            mPaintShadow.setShadowLayer(mShadowRadius, mOffsetX, mOffsetY, mMainColor);
-            invalidate();
-        }
-    };
+    private Handler mHandler;
 
     public PaletteImageView(Context context) {
         this(context, null);
@@ -99,6 +87,7 @@ public class PaletteImageView extends View {
         mPaint  = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setDither(true);
         mPorterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
+        mHandler = new MyHandler(this);
     }
 
     @Override
@@ -138,6 +127,12 @@ public class PaletteImageView extends View {
             canvas.drawBitmap(mRoundBitmap, mPadding, mPadding, null);
             if (mMainColor != -1) mAsyncTask.cancel(true);
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     public void setShadowColor(int color){
@@ -327,5 +322,24 @@ public class PaletteImageView extends View {
     public interface OnParseColorListener {
         void onComplete(PaletteImageView paletteImageView);
         void onFail();
+    }
+
+    private static class MyHandler extends Handler{
+        private final WeakReference<PaletteImageView> mPaletteImageViewWeakReference;
+        public MyHandler(PaletteImageView paletteImageView){
+            mPaletteImageViewWeakReference = new WeakReference<PaletteImageView>(paletteImageView);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (mPaletteImageViewWeakReference.get() != null) {
+                PaletteImageView paletteImageView = mPaletteImageViewWeakReference.get();
+                if (paletteImageView.mOffsetX < DEFAULT_OFFSET) paletteImageView.mOffsetX = DEFAULT_OFFSET;
+                if (paletteImageView.mOffsetY < DEFAULT_OFFSET) paletteImageView.mOffsetY = DEFAULT_OFFSET;
+                if (paletteImageView.mShadowRadius < DEFAULT_SHADOW_RADIUS) paletteImageView.mShadowRadius = DEFAULT_SHADOW_RADIUS;
+                paletteImageView.mPaintShadow.setShadowLayer(paletteImageView.mShadowRadius, paletteImageView.mOffsetX,paletteImageView. mOffsetY, paletteImageView.mMainColor);
+                paletteImageView.invalidate();
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@
 
 ### build.gradle中引用
 ```
-	compile 'com.dingmouren.paletteimageview:paletteimageview:1.0.5'
+	compile 'com.dingmouren.paletteimageview:paletteimageview:1.0.6'
 ```
 　　　　　　　　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/title.gif) 
 ##### 1.参数的控制
