@@ -6,4 +6,6 @@
         />
     <item android:id="@+id/two"
         android:title="SampleTwo"/>
+    <item android:id="@+id/three"
+        android:title="GlideTest"/>
 </menu>

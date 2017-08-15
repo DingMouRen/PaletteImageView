@@ -16,6 +16,9 @@ import android.os.Message;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.dingmouren.paletteimageview.listener.OnParseColorListener;
+
 import java.lang.ref.WeakReference;
 
 /**
@@ -122,9 +125,9 @@ public class PaletteImageView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (mRealBitmap != null) {
+        if (mRealBitmap != null ) {
             canvas.drawRoundRect(mRectFShadow, mRadius, mRadius, mPaintShadow);
-            canvas.drawBitmap(mRoundBitmap, mPadding, mPadding, null);
+            if (mRoundBitmap != null)canvas.drawBitmap(mRoundBitmap, mPadding, mPadding, null);
             if (mMainColor != -1) mAsyncTask.cancel(true);
         }
     }
@@ -142,6 +145,7 @@ public class PaletteImageView extends View {
 
     public void setBitmap(Bitmap bitmap) {
         this.mBitmap = bitmap;
+        zipBitmap(mImgId, mBitmap, mOnMeasureHeightMode);
     }
 
     public void setPaletteRadius(int raius) {
@@ -181,6 +185,7 @@ public class PaletteImageView extends View {
     }
 
     private Bitmap createRoundConerImage(Bitmap source, int radius) {
+        if (source == null) return null;
         Bitmap target = Bitmap.createBitmap(getWidth() - mPadding * 2, getHeight() - mPadding * 2, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(target);
         canvas.drawRoundRect(mRoundRectF, radius, radius, mPaint);
@@ -233,6 +238,7 @@ public class PaletteImageView extends View {
             } else if (rawHeight < rawWidth) {
                 dx = (rawWidth - rawHeight) / 2;
             }
+            if (small <= 0) return;
             mRealBitmap = Bitmap.createBitmap(bitmap, dx, dy, small, small, matrix, true);
         }
         initShadow(mRealBitmap);
@@ -319,10 +325,6 @@ public class PaletteImageView extends View {
         return arry;
     }
 
-    public interface OnParseColorListener {
-        void onComplete(PaletteImageView paletteImageView);
-        void onFail();
-    }
 
     private static class MyHandler extends Handler{
         private final WeakReference<PaletteImageView> mPaletteImageViewWeakReference;

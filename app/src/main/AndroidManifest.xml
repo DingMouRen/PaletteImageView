@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dingmouren.smaple.paletteimageview">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,14 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SampleOneActivity"
-            android:theme="@style/SampleOneStyle"
-            >
+        <activity
+            android:name=".SampleOneActivity"
+            android:theme="@style/SampleOneStyle">
 
         </activity>
-        <activity android:name=".SampleTwoActivity"
-            android:theme="@style/SampleTwoStyle"
-            >
+        <activity
+            android:name=".SampleTwoActivity"
+            android:theme="@style/SampleTwoStyle">
+
+        </activity>
+
+        <activity android:name=".GlideTestActivity">
 
         </activity>
     </application>

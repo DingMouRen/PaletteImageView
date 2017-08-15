@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dingmouren.paletteimageview.PaletteImageView;
+import com.dingmouren.paletteimageview.listener.OnParseColorListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,7 @@ public class SampleTwoActivity extends AppCompatActivity {
             }
 
             private void initListener() {
-                mPaletteImageView.setOnParseColorListener(new PaletteImageView.OnParseColorListener() {
+                mPaletteImageView.setOnParseColorListener(new OnParseColorListener() {
                     @Override
                     public void onComplete(PaletteImageView paletteImageView) {
                         int[] vibrant = paletteImageView.getVibrantColor();
