@@ -56,7 +56,7 @@
 
 xml属性 | 描述
 ---|---
-  app:palettePadding | 表示阴影显示最大空间距离。值为0,没有阴影，大于0，才有阴影。
+  app:palettePadding | **表示阴影显示最大空间距离。值为0,没有阴影，大于0，才有阴影。**
   app:paletteOffsetX | 表示阴影在x方向上的偏移量
   app:paletteOffsetY | 表示阴影在y方向上的偏移量
   app:paletteSrc | 表示图片资源
