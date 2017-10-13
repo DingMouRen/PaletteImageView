@@ -80,7 +80,7 @@ public void setShadowColor(int color) | 表示自定义设置控件阴影的颜�
 
 ## License
 ```
-Copyright (C) 2017 WeyYe
+Copyright (C) 2017 DingMouRen
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
