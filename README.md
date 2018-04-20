@@ -1,97 +1,96 @@
-![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p1.png)　
-### 简介
-* 可以解析图片中的主色调，**默认将主色调作为控件阴影的颜色**
-* 可以**自定义设置控件的阴影颜色**
-* 可以**控制控件四个角的圆角大小**（如果控件设置成正方向，随着圆角半径增大，可以将控件变成圆形）
-* 可以**控制控件的阴影半径大小**
-* 可以分别**控制阴影在x方向和y方向上的偏移量**
-* 可以将图片中的颜色解析出**六种主题颜色**，每一种主题颜色都有相应的**匹配背景、标题、正文的推荐颜色**
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p1.png)
+### Introduction
+* Can parse the main tones in the image, ** Defaults to the main color as the color of the control's shadow**
+* can ** customize the control's shadow color**
+* can control the corner size of the four corners of the control** (if the control is set to a positive direction, the control can be rounded as the corner radius increases)
+* Can control the shadow radius of the control**
+* You can control the offset of the shadow in the x and y directions respectively**
+* The color in the picture can be parsed out of six theme colors**, each theme color has a corresponding color matching background, title, text recommendation color**
 
 
-### build.gradle中引用
+### References in build.gradle
 ```
-	compile 'com.dingmouren.paletteimageview:paletteimageview:1.0.7'
+Compile 'com.dingmouren.paletteimageview:paletteimageview:1.0.7'
 ```
-　　　　　　　　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/title.gif) 
-##### 1.参数的控制
-圆角半径|阴影模糊范围|阴影偏移量
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/title.gif)
+##### 1. Parameter Control
+Corner Radius | Shadow Blur Range | Shadow Offset
 ---|---|---
-![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo1.gif) | ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo2.gif) | ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo3.gif)
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo1.gif) | ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot /demo2.gif) | ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo3.gif)
 
-##### 2.阴影颜色默认是图片的主色调
+##### 2. Shadow color defaults to the main color of the picture
 
-　　　　　　　　　　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo4.gif)
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo4.gif)
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p2.png)
-##### 3.图片颜色主题解析
+##### 3. Image color theme analysis
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p3.png)
-### 使用
+### Use
 
 ```
- <com.dingmouren.paletteimageview.PaletteImageView
-         android:id="@+id/palette"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         app:palettePadding="20dp"
-         app:paletteOffsetX="15dp"
-         app:paletteOffsetY="15dp"
-         />
- mPaletteImageView.setOnParseColorListener(new PaletteImageView.OnParseColorListener() {
-                     @Override//解析图片的颜色完毕
-                     public void onComplete(PaletteImageView paletteImageView) {
-                         int[] vibrant = paletteImageView.getVibrantColor();
-                         int[] vibrantDark = paletteImageView.getDarkVibrantColor();
-                         int[] vibrantLight = paletteImageView.getLightVibrantColor();
-                         int[] muted = paletteImageView.getMutedColor();
-                         int[] mutedDark = paletteImageView.getDarkMutedColor();
-                         int[] mutedLight = paletteImageView.getLightMutedColor();
-                     }
- 
-                     @Override//解析图片的颜色失败
-                     public void onFail() {
- 
-                     }
-                 });        
+ <com.dingmouren.paletteimageview.PaletteImageView
+         Android:id="@+id/palette"
+         Android:layout_width="match_parent"
+         Android:layout_height="wrap_content"
+         App:palettePadding="20dp"
+         App:paletteOffsetX="15dp"
+         App:paletteOffsetY="15dp"
+         />
+ mPaletteImageView.setOnParseColorListener(new PaletteImageView.OnParseColorListener() {
+                     @Override//Complete the color of the image
+                     Public void onComplete(PaletteImageView paletteImageView) {
+                         Int[] vibrant = paletteImageView.getVibrantColor();
+                         Int[] vibrantDark = paletteImageView.getDarkVibrantColor();
+                         Int[] vibrantLight = paletteImageView.getLightVibrantColor();
+                         Int[] muted = paletteImageView.getMutedColor();
+                         Int[] mutedDark = paletteImageView.getDarkMutedColor();
+                         Int[] mutedLight = paletteImageView.getLightMutedColor();
+                     }
+ 
+                     @Override // failed to parse the color of the image
+                     Public void onFail() {
+ 
+                     }
+                 });
 ```
-### xml属性
+### xml attributes
 
-xml属性 | 描述
+Xml attribute | Description
 ---|---
-  app:palettePadding | **表示阴影显示最大空间距离。值为0,没有阴影，大于0，才有阴影。**
-  app:paletteOffsetX | 表示阴影在x方向上的偏移量
-  app:paletteOffsetY | 表示阴影在y方向上的偏移量
-  app:paletteSrc | 表示图片资源
-  app:paletteRadius | 表示圆角半径
-  app:paletteShadowRadius | 表示阴影模糊范围
-### 公共的方法
-方法 | 描述
+  App:palettePadding | ** indicates that the shadow shows the maximum spatial distance. A value of 0, no shadow, greater than 0, shadows. **
+  App:paletteOffsetX | represents the offset of the shadow in the x direction
+  App:paletteOffsetY | represents the offset of the shadow in the y direction
+  App:paletteSrc | represents a picture resource
+  App:paletteRadius | indicates the corner radius
+  App:paletteShadowRadius | Indicates shadow blurring
+### Public Methods
+Method | Description
 ---|---
-public void setShadowColor(int color) | 表示自定义设置控件阴影的颜色
- public void setBitmap(Bitmap bitmap) | 表示设置控件位图
- public void setPaletteRadius(int raius) | 表示设置控件圆角半径
- public void setPaletteShadowOffset(int offsetX, int offsetY) | 表示设置阴影在控件阴影在x方向 或 y方向上的偏移量
- public void setPaletteShadowRadius(int radius) | 表示设置控件阴影模糊范围
- public void setOnParseColorListener(OnParseColorListener listener) | 设置控件解析图片颜色的监听器
- public int[] getVibrantColor() | 表示获取Vibrant主题的颜色数组；假设颜色数组为arry,arry[0]是推荐标题使用的颜色，arry[1]是推荐正文使用的颜色，arry[2]是推荐背景使用的颜色。颜色只是用于推荐，可以自行选择
- public int[] getDarkVibrantColor()| 表示获取DarkVibrant主题的颜色数组，数组元素含义同上
- public int[] getLightVibrantColor()| 表示获取LightVibrant主题的颜色数组，数组元素含义同上
- public int[] getMutedColor()| 表示获取Muted主题的颜色数组，数组元素含义同上
- public int[] getDarkMutedColor()| 表示获取DarkMuted主题的颜色数组，数组元素含义同上
- public int[] getLightMutedColor()| 表示获取LightMuted主题的颜色数组，数组元素含义同上
+Public void setShadowColor(int color) | Represents the color of the custom settings control shadow
+ Public void setBitmap(Bitmap bitmap) | Represents setting the control bitmap
+ Public void setPaletteRadius(int raius) | Represents to set control corner radius
+ Public void setPaletteShadowOffset(int offsetX, int offsetY) | Represents the offset of the shadow of the control in the x-direction or y-direction.
+ Public void setPaletteShadowRadius(int radius) | Represents how to set control shadow blurring
+ Public void setOnParseColorListener(OnParseColorListener listener) | Set the listener to control the color of the image
+ Public int[] getVibrantColor() | Represents an array of colors to get the Vibrant theme; assuming that the color array is arry, arry[0] is the color used by the recommended title, arry[1] is the color used by the recommended body, and arry[2] is the recommended The color used for the background. Colors are for recommendations only, you can choose
+ Public int[] getDarkVibrantColor()| Represents an array of colors for obtaining the DarkVibrant theme. The meaning of the array element is the same as above
+ Public int[] getLightVibrantColor()| Represents the color array of the LightVibrant theme. The meaning of the array element is the same as above
+ Public int[] getMutedColor()| Represents the color array of the Muted theme. The meaning of the array element is the same as above.
+ Public int[] getDarkMutedColor()| Represents the color array of the DarkMuted theme. The meaning of the array element is the same as above.
+ Public int[] getLightMutedColor()| Represents the color array of the LightMuted theme. The meaning of the array element is the same as above
 
 ## License
 ```
 Copyright (C) 2017 DingMouRen
 
 Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
+You may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
+Distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License
+Limitations under the License
 ```
-
