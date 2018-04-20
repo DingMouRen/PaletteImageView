@@ -12,15 +12,15 @@
 ```
 Compile 'com.dingmouren.paletteimageview:paletteimageview:1.0.7'
 ```
-![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/title.gif)
+　　　　　　　　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/title.gif) 
 ##### 1. Parameter Control
 Corner Radius | Shadow Blur Range | Shadow Offset
 ---|---|---
-![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo1.gif) | ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot /demo2.gif) | ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo3.gif)
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo1.gif) | ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo2.gif) | ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo3.gif)
 
 ##### 2. Shadow color defaults to the main color of the picture
 
-![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo4.gif)
+　　　　　　　　　　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo4.gif)
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p2.png)
 ##### 3. Image color theme analysis
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p3.png)
