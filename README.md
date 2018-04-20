@@ -1,11 +1,11 @@
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p1.png)
 ### Introduction
-* Can parse the main tones in the image, ** Defaults to the main color as the color of the control's shadow**
-* can ** customize the control's shadow color**
-* can control the corner size of the four corners of the control** (if the control is set to a positive direction, the control can be rounded as the corner radius increases)
-* Can control the shadow radius of the control**
-* You can control the offset of the shadow in the x and y directions respectively**
-* The color in the picture can be parsed out of six theme colors**, each theme color has a corresponding color matching background, title, text recommendation color**
+* Can parse the main tones in the image, **Defaults to the main color as the color of the control's shadow**
+* can **customize the control's shadow color**
+* can control the corner size of the four corners of the control **(if the control is set to a positive direction, the control can be rounded as the corner radius increases)**
+* Can control the **shadow radius of the control**
+* You can control the **offset of the shadow in the x and y directions respectively**
+* The color in the picture can be parsed out of six theme colors, **each theme color has a corresponding color matching background, title, text recommendation color**
 
 
 ### References in build.gradle
@@ -26,8 +26,9 @@ Corner Radius | Shadow Blur Range | Shadow Offset
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p3.png)
 ### Use
 
+###XML
 ```
- <com.dingmouren.paletteimageview.PaletteImageView
+<com.dingmouren.paletteimageview.PaletteImageView
          Android:id="@+id/palette"
          Android:layout_width="match_parent"
          Android:layout_height="wrap_content"
@@ -35,7 +36,11 @@ Corner Radius | Shadow Blur Range | Shadow Offset
          App:paletteOffsetX="15dp"
          App:paletteOffsetY="15dp"
          />
- mPaletteImageView.setOnParseColorListener(new PaletteImageView.OnParseColorListener() {
+     
+     
+     JAVA 
+     --------
+     mPaletteImageView.setOnParseColorListener(new PaletteImageView.OnParseColorListener() {
                      @Override//Complete the color of the image
                      Public void onComplete(PaletteImageView paletteImageView) {
                          Int[] vibrant = paletteImageView.getVibrantColor();
@@ -56,7 +61,7 @@ Corner Radius | Shadow Blur Range | Shadow Offset
 
 Xml attribute | Description
 ---|---
-  App:palettePadding | ** indicates that the shadow shows the maximum spatial distance. A value of 0, no shadow, greater than 0, shadows. **
+  App:palettePadding | **indicates that the shadow shows the maximum spatial distance. A value of 0, no shadow, greater than 0, shadows. **
   App:paletteOffsetX | represents the offset of the shadow in the x direction
   App:paletteOffsetY | represents the offset of the shadow in the y direction
   App:paletteSrc | represents a picture resource
