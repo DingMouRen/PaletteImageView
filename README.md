@@ -61,7 +61,7 @@ Corner Radius | Shadow Blur Range | Shadow Offset
 
 Xml attribute | Description
 ---|---
-  App:palettePadding | **indicates that the shadow shows the maximum spatial distance. A value of 0, no shadow, greater than 0, shadows. **
+  App:palettePadding | **indicates that the shadow shows the maximum spatial distance. A value of 0, no shadow, greater than 0, shadows.**
   App:paletteOffsetX | represents the offset of the shadow in the x direction
   App:paletteOffsetY | represents the offset of the shadow in the y direction
   App:paletteSrc | represents a picture resource
