@@ -2,6 +2,7 @@
 
 ### English Readme 
 [English Version](https://github.com/hasanmohdkhan/PaletteImageView/blob/master/README%20English.md)
+(Thank you, [hasanmohdkhan](https://github.com/hasanmohdkhan))
 
 ### 简介
 * 可以解析图片中的主色调，**默认将主色调作为控件阴影的颜色**
