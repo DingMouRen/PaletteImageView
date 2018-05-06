@@ -1,4 +1,8 @@
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p1.png)　
+
+### English Readme 
+[English Version](https://github.com/hasanmohdkhan/PaletteImageView/blob/master/README%20English.md)
+
 ### 简介
 * 可以解析图片中的主色调，**默认将主色调作为控件阴影的颜色**
 * 可以**自定义设置控件的阴影颜色**
