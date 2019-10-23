@@ -85,6 +85,8 @@ public class PaletteImageView extends View {
 
         mPaintShadow = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintShadow.setDither(true);
+        mPaintShadow.setAntiAlias(true);
+        mPaintShadow.setColor(Color.WHITE);
         setLayerType(LAYER_TYPE_SOFTWARE, null);
         setBackgroundColor(getResources().getColor(android.R.color.transparent));
         mPaint  = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -119,7 +121,7 @@ public class PaletteImageView extends View {
         zipBitmap(mImgId, mBitmap, mOnMeasureHeightMode);
         mRectFShadow = new RectF(mPadding, mPadding, getWidth() - mPadding, getHeight() - mPadding);
         mRoundRectF = new RectF(0, 0, getWidth() - mPadding * 2, getHeight() - mPadding * 2);
-        mRoundBitmap = createRoundConerImage(mRealBitmap,mRadius);
+        //mRoundBitmap = createRoundConerImage(mRealBitmap,mRadius);
 
     }
 
@@ -127,6 +129,7 @@ public class PaletteImageView extends View {
     protected void onDraw(Canvas canvas) {
         if (mRealBitmap != null ) {
             canvas.drawRoundRect(mRectFShadow, mRadius, mRadius, mPaintShadow);
+            mRoundBitmap = createRoundConerImage(mRealBitmap, mRadius);
             if (mRoundBitmap != null)canvas.drawBitmap(mRoundBitmap, mPadding, mPadding, null);
             if (mMainColor != -1) mAsyncTask.cancel(true);
         }
@@ -263,6 +266,7 @@ public class PaletteImageView extends View {
             if (palette != null) {
                 mPalette = palette;
                 mMainColor = palette.getDominantSwatch().getRgb();
+                mPaintShadow.setColor(mMainColor);
                 mHandler.sendEmptyMessage(MSG);
                 if (mListener != null) mListener.onComplete(mInstance);
             } else {
