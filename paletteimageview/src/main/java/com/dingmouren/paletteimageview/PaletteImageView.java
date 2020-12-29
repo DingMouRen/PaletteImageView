@@ -13,7 +13,7 @@ import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.graphics.Palette;
+import androidx.palette.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.View;
 
