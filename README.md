@@ -28,8 +28,7 @@
 　　　　　　　　　　　　　　　　　　　![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/demo4.gif)
 ![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p2.png)
 ##### 3.图片颜色主题解析
-![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p3.png)<br>
-![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/sample_1.png)
+![image](https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p3.png)
 ### 使用
 
 ```
