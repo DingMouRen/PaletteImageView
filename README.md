@@ -84,7 +84,4 @@ public void setShadowColor(int color) | 表示自定义设置控件阴影的颜�
  public int[] getLightMutedColor()| 表示获取LightMuted主题的颜色数组，数组元素含义同上
 
 <br>此项目已暂停维护<br>
-
-<div align=center>
-    <img src="https://github.com/DingMouRen/PaletteImageView/raw/master/screenshot/p2.png" width="60%">
-</div>
+ 
