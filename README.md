@@ -93,7 +93,7 @@ public void setShadowColor(int color) | 表示自定义设置控件阴影的颜�
 </table>
 <table>
   <tr>
-    <td ><img src="https://img0.baidu.com/it/u=1059389492,972474899&fm=253&fmt=auto&app=138&f=JPEG" width="20%"></td>
+    <td ><img src="https://img0.baidu.com/it/u=1059389492,972474899&fm=253&fmt=auto&app=138&f=JPEG" width="200%"></td>
     <td >生活是自己的。</td>
   </tr>
 </table>
