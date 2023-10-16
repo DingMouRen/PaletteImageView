@@ -85,26 +85,4 @@ public void setShadowColor(int color) | 表示自定义设置控件阴影的颜�
 
 <br>此项目已暂停维护<br>
  
-<table>
-  <tr>
-    <td ><img src="https://img0.baidu.com/it/u=1059389492,972474899&fm=253&fmt=auto&app=138&f=JPEG" width="100%"></td>
-    <td >生活是自己的，你选择怎样的生活，就会成就怎样的你。与其抱怨这个世界不美好，不如用自己的努力，争取更多的美好和幸运。</td>
-  </tr>
-</table>
-<table>
-  <tr>
-    <td ><img src="https://img0.baidu.com/it/u=1059389492,972474899&fm=253&fmt=auto&app=138&f=JPEG" width="600%"></td>
-    <td >生活</td>
-  </tr>
-</table>
-<table>
-  <tr>
-    <td ><img src="https://img0.baidu.com/it/u=1059389492,972474899&fm=253&fmt=auto&app=138&f=JPEG" width="100%"></td>
-    <td >生活是自己的，你选择怎样的生活，就会成就怎样的你。与其抱怨这个世界不美好，不如用自己的努力，争取更多的美好和幸运。生活是自己的，你选择怎样的生活，就会成就怎样的你。与其抱怨这个世界不美好，不如用自己的努力，争取更多的美好和幸运。生活是自己的，你选择怎样的生活，就会成就怎样的你。与其抱怨这个世界不美好，不如用自己的努力，争取更多的美好和幸运。生活是自己的，你选择怎样的生活，就会成就怎样的你。与其抱怨这个世界不美好，不如用自己的努力，争取更多的美好和幸运。生活是自己的，你选择怎样的生活，就会成就怎样的你。与其抱怨这个世界不美好，不如用自己的努力，争取更多的美好和幸运。生活是自己的，你选择怎样的生活，就会成就怎样的你。与其抱怨这个世界不美好，不如用自己的努力，争取更多的美好和幸运。</td>
-  </tr>
-</table>
 
-{:.table-split}
-| 左侧宽度 | 右侧宽度 |
-| -------:| -------:|
-| <div align=center><img src="https://github.com/DingMouRen/ShadeCraft/raw/master/resource/sample_6.png" width="100%"></div>    | 50%     |
