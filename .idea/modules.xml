@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PaletteImageView.iml" filepath="$PROJECT_DIR$/PaletteImageView.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/paletteimageview/paletteimageview.iml" filepath="$PROJECT_DIR$/paletteimageview/paletteimageview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PaletteImageView.iml" filepath="$PROJECT_DIR$/.idea/PaletteImageView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PaletteImageView.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PaletteImageView.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/paletteimageview/PaletteImageView.paletteimageview.iml" filepath="$PROJECT_DIR$/.idea/modules/paletteimageview/PaletteImageView.paletteimageview.iml" />
     </modules>
   </component>
 </project>
